@@ -1,4 +1,7 @@
 
+#ifndef __GRAPH_CPP
+#define __GRAPH_CPP
+
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
@@ -61,3 +64,5 @@ class Graph
     }
 
 };
+
+#endif /* __GRAPH_CPP */
