@@ -2,6 +2,7 @@
 #include <vector>
 
 #include "utils/Graph.h"
+#include "utils/KDTree.h"
 #include "utils/Map.h"
 #include "utils/Obstacle.h"
 #include "utils/Point.h"

@@ -2,10 +2,11 @@
 APP_NAME = planner
 
 OBJS = main.o \
-		   utils/Point.o \
-			 utils/Obstacle.o \
 			 utils/Graph.o \
+			 utils/KDTree.o \
 			 utils/Map.o \
+			 utils/Obstacle.o \
+			 utils/Point.o \
 			 Visualizer.o
 
 CXX = g++

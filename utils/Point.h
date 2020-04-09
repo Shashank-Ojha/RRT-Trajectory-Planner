@@ -14,6 +14,8 @@
 #ifndef __POINT_H
 #define __POINT_H
 
+#include <iostream>
+
 /* Constants for Line-Side Test */
 #define LEFT -1
 #define ON 0
