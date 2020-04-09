@@ -1,25 +1,26 @@
-CFLAGS = -std=c++17 -framework GLUT -framework OpenGL -framework Cocoa
 
-planner: main.o Point.o Obstacle.o Graph.o Map.o # Visualizer.o
-	g++ $(CFLAGS) main.cpp -o planner
+APP_NAME = planner
 
-main.o: main.cpp
-	g++ $(CFLAGS) -c main.cpp
+OBJS = main.o \
+		   utils/Point.o \
+			 utils/Obstacle.o \
+			 utils/Graph.o \
+			 utils/Map.o \
+			 Visualizer.o
 
-Point.o: Point.cpp
-	g++ $(CFLAGS) -c Point.cpp
+CXX = g++
+CXXFLAGS = -std=c++17 -framework GLUT -framework OpenGL -framework Cocoa
 
-Obstacle.o: Obstacle.cpp
-	g++ $(CFLAGS) -c Obstacle.cpp
+$(APP_NAME): $(OBJS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o planner
 
-Graph.o: Graph.cpp
-	g++ $(CFLAGS) -c Graph.cpp
+# Create Object file for everything in utils dir
+utils/%.o: utils/%.cpp utils/%.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-Map.o: Map.cpp
-	g++ $(CFLAGS) -c Map.cpp
-
-# Visualizer.o: Visualizer.cpp
-# 	g++ -std=c++17 -framework GLUT -framework OpenGL -framework Cocoa -c Visualizer.cpp
+# Create Object file for everything in current dir
+%.o: %.cpp %.h
+	$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
 clean:
-	rm *.o planner
+	rm *.o utils/*.o planner

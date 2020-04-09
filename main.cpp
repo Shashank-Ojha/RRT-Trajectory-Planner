@@ -1,23 +1,17 @@
-/*
-  Temporary file to test code 
-
-  Compile using: g++ main.cpp -std=c++17
-  Run using: ./a.out
-*/
-
 #include <iostream>
 #include <vector>
 
-#include "Point.cpp"
-#include "Graph.cpp"
-#include "Obstacle.cpp"
-#include "Map.cpp"
-#include "Visualizer.cpp"
+#include "utils/Graph.h"
+#include "utils/Map.h"
+#include "utils/Obstacle.h"
+#include "utils/Point.h"
 
+#include "Visualizer.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
+
 
   // Graph<Point> graph(root);
   Color black = {0, 0, 0};
@@ -42,8 +36,8 @@ int main(int argc, char *argv[]) {
 
   // cout << graph;
     
-    Visualizer v;
-    v.init(argc, argv);
-    v.plot_obstacle(polygon, black);
-    v.run();
+  Visualizer v;
+  v.init(argc, argv);
+  v.plot_obstacle(polygon, black);
+  v.run();
 }
