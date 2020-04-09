@@ -1,4 +1,12 @@
-/* Point class to store (x, y) points and some utility functions for them */
+/**
+ *  @file Point.cpp
+ *  @brief Implements the class Point defined in Point.h
+ *
+ *  @author Shashank Ojha (shashano)
+ *  @author Serris Lew (snlew)
+ *  @author David Bick (dbick)
+ *  @bug No known bugs.
+ */
 
 #include <math.h>
 #include <iomanip>      // std::setprecision
@@ -7,20 +15,34 @@
 
 using namespace std;
 
+/**
+ * @brief Default constructor.
+ *
+ * @return Point at (0, 0).
+ */
 Point::Point() {
   this->x = 0;
   this->y = 0;
 }
 
+/**
+ * @brief Constructor for a given point at a given location.
+ *
+ * @param x Coordinate value.
+ * @param y Coordinate value.
+ * @return Point at (x, y).
+ */
 Point::Point(double x, double y) {
   this->x = x;
   this->y = y;
 }
 
-
-/*
-  Returns the sum with the other point
-*/
+/**
+ * @brief Takes vector sum of two points.
+ *
+ * @param other Point to add.
+ * @return Point containing sum of this point and other point.
+ */
 Point Point::operator + (Point const &other) { 
       Point res; 
       res.x = this->x + other.x; 
@@ -28,9 +50,12 @@ Point Point::operator + (Point const &other) {
       return res; 
 }
 
-/*
-  Returns the difference with the other point
-*/
+/**
+ * @brief Takes vector difference of two points.
+ *
+ * @param other Point to subtract.
+ * @return Point containing difference between this point and other point.
+ */
 Point Point::operator - (Point const &other) { 
       Point res; 
       res.x = this->x - other.x; 
@@ -38,24 +63,45 @@ Point Point::operator - (Point const &other) {
       return res; 
 }
 
-/*
-  Returns the dot product with the other point
-*/
+/**
+ * @brief Computes dot product of two points.
+ *
+ * @param other Point to dot against.
+ * @return Dot product of two points.
+ */
 double Point::dot(Point &other) {
   return (this->x * other.x) + (this->y * other.y);
 }
 
-/*
-  Returns the cross product with the other point
-*/
+/**
+ * @brief Computes cross product of two points.
+ *
+ * @param other Point to cross against.
+ * @return Cross product of two points.
+ */
 double Point::cross(Point &other) {
   return (this->x * other.y) - (other.x * this->y);
 }
 
-/*
-  Returns whether the point is ON, the LEFT of, or the RIGHT of the
-  line passing through A and B
-*/
+/**
+ * @brief Computes distance between two points.
+ *
+ * @param other Point to cross against.
+ * @return Cross product of two points.
+ */
+double Point::dist(Point &other) {
+  Point delta = other - *this;
+  return sqrt(delta.dot(delta));
+}
+
+/**
+ * @brief Returns whether the point is ON, the LEFT of, or the RIGHT of the
+ * line passing through A and B.
+ *
+ * @param A First point on line.
+ * @param B Second point on line.
+ * @return Line side test result of current point with respect to line AB.
+ */
 int Point::line_side_of(Point &A, Point &B) {
   Point line = B - A;
   Point error = *this - A;
@@ -69,11 +115,13 @@ int Point::line_side_of(Point &A, Point &B) {
   return ON;
 }
 
-double Point::dist(Point &other) {
-  Point delta = other - *this;
-  return sqrt(delta.dot(delta));
-}
-
+/**
+ * @brief Adds support for printing Points.
+ * 
+ * @param os Output stream.
+ * @param p Point Object.
+ * @return New output stream with point inside stream.
+ */
 ostream& operator<<(ostream& os, const Point& p) {
   os << fixed;
   os << setprecision(3);

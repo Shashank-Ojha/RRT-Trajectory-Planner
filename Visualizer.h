@@ -1,8 +1,13 @@
-/*
-    Plot initial point, final point, obstacles and trajectory
- 
-    On Xcode, Run Visualizer project
+/**
+ *  @file Visualizer.h
+ *  @brief Defines a class to plot points, obstacles, graphs, and trajectories
+ *
+ *  @author Shashank Ojha (shashano)
+ *  @author Serris Lew (snlew)
+ *  @author David Bick (dbick)
+ *  @bug No known bugs.
  */
+
 #ifndef __VISUALIZER_H
 #define __VISUALIZER_H
 
@@ -16,10 +21,12 @@
 #include "utils/Point.h"
 #include "utils/Graph.h"
 
+/* Constants about our Display Screen */
 #define SCREEN_WIDTH 900
 #define SCREEN_HEIGHT 900
 #define SCALE 0.05
 
+/* Struct to keep track of Colors */
 struct Color {
     GLbyte r, g, b;
 };
@@ -27,17 +34,17 @@ struct Color {
 class Visualizer {
     
   public:
+    /* Constructors */
     Visualizer();
 
+    /* Function Prototypes */
     void plot_point(Point &p, Color &node_color);
     void plot_segment(Point &p1, Point &p2, Color &node_color, Color &edge_color);
     void plot_trajectory(vector<Point> &trajectory, Color &node_color, Color &edge_color);
     void plot_graph(Graph<Point> &graph, Color &node_color, Color &edge_color);
     void plot_obstacle(vector<Point> &obstacles, Color &edge_color);
     
-    static void display() {
-      glClear(GL_COLOR_BUFFER_BIT);
-    }
+    static void display();
 
     void rescale(Point &p);
     void init(int argc, char *argv[]);

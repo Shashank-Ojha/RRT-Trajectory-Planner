@@ -80,6 +80,10 @@ void Visualizer::plot_obstacle(vector<Point> &obstacles, Color &edge_color) {
     glEnd();
 }
 
+void Visualizer::display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
 void Visualizer::rescale(Point &p) {
     p.x *= SCALE;
     p.y *= SCALE;
