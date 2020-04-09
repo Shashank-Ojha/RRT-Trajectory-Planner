@@ -1,17 +1,22 @@
-planner: main.o Point.o Obstacle.o Graph.o # Visualizer.o
-	g++ -std=c++17 -framework GLUT -framework OpenGL -framework Cocoa main.cpp -o planner
+CFLAGS = -std=c++17 -framework GLUT -framework OpenGL -framework Cocoa
+
+planner: main.o Point.o Obstacle.o Graph.o Map.o # Visualizer.o
+	g++ $(CFLAGS) main.cpp -o planner
 
 main.o: main.cpp
-	g++ -std=c++17 -c main.cpp
+	g++ $(CFLAGS) -c main.cpp
 
 Point.o: Point.cpp
-	g++ -std=c++17 -c Point.cpp
+	g++ $(CFLAGS) -c Point.cpp
 
 Obstacle.o: Obstacle.cpp
-	g++ -std=c++17 -c Obstacle.cpp
+	g++ $(CFLAGS) -c Obstacle.cpp
 
 Graph.o: Graph.cpp
-	g++ -std=c++17 -c Graph.cpp
+	g++ $(CFLAGS) -c Graph.cpp
+
+Map.o: Map.cpp
+	g++ $(CFLAGS) -c Map.cpp
 
 # Visualizer.o: Visualizer.cpp
 # 	g++ -std=c++17 -framework GLUT -framework OpenGL -framework Cocoa -c Visualizer.cpp

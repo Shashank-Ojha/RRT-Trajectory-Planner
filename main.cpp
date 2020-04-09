@@ -11,6 +11,7 @@
 #include "Point.cpp"
 #include "Graph.cpp"
 #include "Obstacle.cpp"
+#include "Map.cpp"
 
 
 using namespace std;
@@ -21,7 +22,7 @@ int main() {
 
   Point A(0, 0);
   Point B(2, 0);
-  Point C(2.01, 1);
+  Point C(1.95, 1);
   Point D(2, 2);
 
   vector<Point> polygon;
@@ -31,7 +32,9 @@ int main() {
   polygon.push_back(D);
 
   Obstacle obs(polygon);
-  cout << obs.collides(C) << endl;
+  Map m;
+  m.add_obstacle(obs);
+  cout << m.is_freespace(C) << endl;
 
   // graph.add_edge(root, A);
   // graph.add_edge(root, B);
