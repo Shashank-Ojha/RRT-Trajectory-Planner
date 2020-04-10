@@ -43,12 +43,16 @@ int main(int argc, char *argv[]) {
   v.run();
 
   */
-  Point *dbick_pt = new Point(23, 24);
-  KDTree *dbick_tree = new KDTree(dbick_pt);
-  std::cout << dbick_tree->root << "\n";
-  std::cout << dbick_tree->root->data << "\n";
-  std::cout << dbick_tree->root->data->x << "\n";
-  std::cout << dbick_tree->root->data->y << "\n";
+  Point *init_pt = new Point(23, 24);
+  Point *pt_two = new Point(0, 1);
+  Node *left_node_test = new Node(pt_two);
+  Point *pt_three = new Point(100, 101);
+  bool exists;
 
+  KDTree *kd_tree = new KDTree(init_pt);
+  kd_tree->root->left = left_node_test;
+  kd_tree->find_node(init_pt, &exists);
+  kd_tree->find_node(pt_two, &exists);
+  kd_tree->find_node(pt_three, &exists);
 
 }

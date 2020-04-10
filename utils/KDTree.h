@@ -18,7 +18,7 @@ class Node
 {
   public:
     /* Data */
-    Point *data; 
+    Point *data;
     Node *left;
     Node *right;
 
@@ -39,7 +39,12 @@ class KDTree
     /* Function Prototypes */
     Point *nearest_neighbor(Point *p);
     bool insert_node(Point *p);
-    Point *find_node(Point *p);
+    /*
+    Pass in a bool* - function will change exists == 1 if found, 0 otherwise
+    If exists == 0, Node * will point to last node visited before point was not
+    found 
+    */
+    Node *find_node(Point *p, bool *exists);
 };
 
 #endif /* __KDTREE_H */
