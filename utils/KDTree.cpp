@@ -61,7 +61,12 @@ Node *KDTree::find_node(Point *p, bool *exists, bool *go_left) {
   int k = 2;
   Node *curr_node = this->root;
 
-  // TODO: handle case when root is the only node
+  // if only node is root
+  if (curr_node->left == NULL && curr_node->right == NULL) {
+      (*exists) = false; (*go_left) = (p->x < curr_node->data->x);
+      return curr_node;
+  }
+
 
   int curr_dim; int split_pt; int p_data; bool is_equal;
 
@@ -106,7 +111,6 @@ Node *KDTree::find_node(Point *p, bool *exists, bool *go_left) {
           curr_node = curr_node->right;
         }
       }
-      cout << "\n";
   }
 
   is_equal = (curr_node->data->x == p->x && curr_node->data->y == p->y);
@@ -119,7 +123,24 @@ Node *KDTree::find_node(Point *p, bool *exists, bool *go_left) {
   return curr_node;
 }
 
+void inorder_traversal_helper(Node *node) {
+  if (node == NULL)
+      return;
 
+  /* first recur on left child */
+  inorder_traversal_helper(node->left);
+  /* then print the data of node */
+  cout << node->data->x << "," << node->data->y << "\n";
+  /* now recur on right child */
+  inorder_traversal_helper(node->right);
+}
+
+void KDTree::print_inorder()
+{
+    cout << '\n';
+    Node *node = this->root;
+    inorder_traversal_helper(node);
+}
 
 /*
 

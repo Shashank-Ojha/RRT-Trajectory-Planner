@@ -51,6 +51,9 @@ class KDTree
     p would be placed
     */
     Node *find_node(Point *p, bool *exists, bool *go_left);
+    void print_inorder(); 
 };
+
+
 
 #endif /* __KDTREE_H */
