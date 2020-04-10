@@ -7,6 +7,7 @@
 #include "utils/Obstacle.h"
 #include "utils/Point.h"
 
+#include "Planner.h"
 #include "Visualizer.h"
 
 using namespace std;
