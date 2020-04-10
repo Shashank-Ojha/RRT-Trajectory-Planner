@@ -10,9 +10,21 @@
 #include "Visualizer.h"
 
 using namespace std;
+string DEFAULT_MAP = "map_easy_1.txt"; 
+
+string parse_args(int argc, char *argv[]) {
+  string filename = DEFAULT_MAP;
+  if (argc > 1) {
+    filename = string(argv[1]);
+  }
+
+  return filename;
+}
 
 int main(int argc, char *argv[]) {
 
+  string filename = parse_args(argc, argv);
+  cout << filename << endl;
 
   // Graph<Point> graph(root);
   Color black = {0, 0, 0};

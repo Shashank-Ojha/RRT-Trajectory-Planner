@@ -1,0 +1,15 @@
+map_height map_width
+num_obstacles
+obstacle_1 num_vertices
+x1 y1
+x2 y2
+...
+xn yn
+obstacle_2 num_vertices
+x1 y1
+x2 y2
+...
+xm ym
+.
+.
+.
