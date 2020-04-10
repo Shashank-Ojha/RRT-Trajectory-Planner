@@ -32,16 +32,16 @@ class Point
 
     /* Constructors */
     Point();
-    Point(double x, double y);
+    Point(const double x, const double y);
 
     /* Function Prototypes */
-    Point operator + (Point const &other);
-    Point operator - (Point const &other);
+    Point operator + (const Point &other) const;
+    Point operator - (const Point &other) const;
 
-    double dot(Point &other);
-    double cross(Point &other);
-    double dist(Point &other);
-    int line_side_of(Point &A, Point &B);
+    double dot(const Point &other) const;
+    double cross(const Point &other) const;
+    double dist(const Point &other) const;
+    int line_side_of(const Point &A, const Point &B) const;
 
     /* Output Stream Definition */
     friend ostream& operator<<(ostream& os, const Point& p);

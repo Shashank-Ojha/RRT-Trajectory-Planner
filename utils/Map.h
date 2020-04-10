@@ -21,16 +21,19 @@ class Map
 {
   public:
     /* Data */
+    float height;
+    float width;
     int num_obstacles;
     vector<Obstacle> obstacles;
 
     /* Constructors */
     Map();
-    Map(vector<Obstacle> obs);
+    Map(const vector<Obstacle> obs);
+    Map(const string filename);
 
     /* Function Prototypes */
-    void add_obstacle(Obstacle &o);
-    bool is_freespace(Point &p);
+    void add_obstacle(const Obstacle &o);
+    bool is_freespace(const Point &p) const;
 };
 
 #endif /* __MAP_H */

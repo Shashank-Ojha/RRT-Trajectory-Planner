@@ -9,6 +9,7 @@
  */
 
 #include <vector>
+#include <fstream>
 
 #include "Map.h"
 #include "Obstacle.h"
@@ -32,9 +33,44 @@ Map::Map() {
  * @param obstacles A vector of all obstacles in map.
  * @return Map containing all obstacles given.
  */
-Map::Map(vector<Obstacle> obs) {
+Map::Map(const vector<Obstacle> obs) {
   this->num_obstacles = obs.size();
   this->obstacles = vector<Obstacle>(obs);
+}
+
+/**
+ * @brief Map constructor that reads data from file.
+ *
+ * @param filename The file to read from.
+ * @return Map containing all data given in file.
+ */
+Map::Map(const string filename) {
+  ifstream infile;
+  infile.open(filename);
+
+  if (!infile) {
+    cout << "Unable to open file!" << endl;
+    exit(1); // terminate with error
+  }
+
+  infile >> this->height;
+  infile >> this->width;
+
+  infile >> this->num_obstacles;
+
+  for (int i = 0; i < this->num_obstacles; i++) {
+    vector<Point> polygon;
+    int n;
+    infile >> n;
+    for (int j = 0; j < n; j++) {
+      float x, y;
+      infile >> x;
+      infile >> y;
+      polygon.push_back(Point(x, y));
+    } 
+    this->obstacles.push_back(Obstacle(polygon));
+    polygon.clear();    
+  }
 }
 
 /**
@@ -43,7 +79,7 @@ Map::Map(vector<Obstacle> obs) {
  * @param obstacle An Obstacle.
  * @return Void.
  */
-void Map::add_obstacle(Obstacle &o) {
+void Map::add_obstacle(const Obstacle &o) {
   this->num_obstacles += 1;
   this->obstacles.push_back(o);
 }
@@ -55,8 +91,8 @@ void Map::add_obstacle(Obstacle &o) {
  * @param p A point.
  * @return True if it doesn't collid with any obstacles and False otherwise.
  */
-bool Map::is_freespace(Point &p) {
-  for(Obstacle &obs : this->obstacles) {
+bool Map::is_freespace(const Point &p) const {
+  for(const Obstacle &obs : this->obstacles) {
     if(obs.collides(p)) {
       return false;
     }

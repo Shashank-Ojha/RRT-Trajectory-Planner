@@ -22,11 +22,11 @@ class Obstacle
     vector<Point> convex_hull;
 
     /* Constructors */
-    Obstacle(vector<Point> &polygon);
+    Obstacle(const vector<Point> &polygon);
 
     /* Function Prototypes */
-    bool is_convex_hull(vector<Point> &polygon);
-    bool collides(Point &p);
+    static bool is_convex_hull(const vector<Point> &polygon);
+    bool collides(const Point &p) const;
 };
 
 #endif /* __OBSTACLE_H */

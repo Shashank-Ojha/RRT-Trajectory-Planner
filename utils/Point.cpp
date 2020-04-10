@@ -32,7 +32,7 @@ Point::Point() {
  * @param y Coordinate value.
  * @return Point at (x, y).
  */
-Point::Point(double x, double y) {
+Point::Point(const double x, const double y) {
   this->x = x;
   this->y = y;
 }
@@ -43,11 +43,11 @@ Point::Point(double x, double y) {
  * @param other Point to add.
  * @return Point containing sum of this point and other point.
  */
-Point Point::operator + (Point const &other) { 
-      Point res; 
-      res.x = this->x + other.x; 
-      res.y = this->y + other.y; 
-      return res; 
+Point  Point::operator + (const Point &other) const { 
+  Point res; 
+  res.x = this->x + other.x; 
+  res.y = this->y + other.y; 
+  return res; 
 }
 
 /**
@@ -56,11 +56,11 @@ Point Point::operator + (Point const &other) {
  * @param other Point to subtract.
  * @return Point containing difference between this point and other point.
  */
-Point Point::operator - (Point const &other) { 
-      Point res; 
-      res.x = this->x - other.x; 
-      res.y = this->y - other.y; 
-      return res; 
+Point Point::operator - (const Point &other) const { 
+  Point res; 
+  res.x = this->x - other.x; 
+  res.y = this->y - other.y; 
+  return res; 
 }
 
 /**
@@ -69,7 +69,7 @@ Point Point::operator - (Point const &other) {
  * @param other Point to dot against.
  * @return Dot product of two points.
  */
-double Point::dot(Point &other) {
+double Point::dot(const Point &other) const {
   return (this->x * other.x) + (this->y * other.y);
 }
 
@@ -79,7 +79,7 @@ double Point::dot(Point &other) {
  * @param other Point to cross against.
  * @return Cross product of two points.
  */
-double Point::cross(Point &other) {
+double Point::cross(const Point &other) const {
   return (this->x * other.y) - (other.x * this->y);
 }
 
@@ -89,7 +89,7 @@ double Point::cross(Point &other) {
  * @param other Point to cross against.
  * @return Cross product of two points.
  */
-double Point::dist(Point &other) {
+double Point::dist(const Point &other) const {
   Point delta = other - *this;
   return sqrt(delta.dot(delta));
 }
@@ -102,7 +102,7 @@ double Point::dist(Point &other) {
  * @param B Second point on line.
  * @return Line side test result of current point with respect to line AB.
  */
-int Point::line_side_of(Point &A, Point &B) {
+int Point::line_side_of(const Point &A, const Point  &B) const {
   Point line = B - A;
   Point error = *this - A;
   double cross_prod = line.cross(error);

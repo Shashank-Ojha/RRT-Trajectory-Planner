@@ -19,7 +19,7 @@
  * @param polygon vector of points defining convex polygon.
  * @return Obstacle containing given points.
  */
-Obstacle::Obstacle(vector<Point> &polygon) {
+Obstacle::Obstacle(const vector<Point> &polygon) {
   assert(is_convex_hull(polygon));
   convex_hull = vector<Point>(polygon);
 }
@@ -30,16 +30,16 @@ Obstacle::Obstacle(vector<Point> &polygon) {
  * @param polygon vector of points defining some polygon.
  * @return True if the points form a convex polygon and False otherwise.
  */
-bool Obstacle::is_convex_hull(vector<Point> &polygon) {
+bool Obstacle::is_convex_hull(const vector<Point> &polygon) {
   int n = polygon.size();
   if (n <= 1) { return false; }
   if (n == 2) { return true; }
 
   int prev_result = 0;
   for (int i = 0; i < n; i++) {
-    Point &A = polygon[i];
-    Point &B = polygon[(i+1) % n];
-    Point &C = polygon[(i+2) % n];
+    const Point &A = polygon[i];
+    const Point &B = polygon[(i+1) % n];
+    const Point &C = polygon[(i+2) % n];
 
     int result = C.line_side_of(A, B);
     // Skip first check because no prev_result
@@ -60,13 +60,13 @@ bool Obstacle::is_convex_hull(vector<Point> &polygon) {
  * @param p A Point to check.
  * @return True if the point lies on or inside the obstacle and False otherwise.
  */
-bool Obstacle::collides(Point &p) {
+bool Obstacle::collides(const Point &p) const {
   int n = this->convex_hull.size();
 
   int violations = 0;
   for (int i = 0; i < n; i++) {
-    Point &A = this->convex_hull[i];
-    Point &B = this->convex_hull[(i+1) % n];
+    const Point &A = this->convex_hull[i];
+    const Point &B = this->convex_hull[(i+1) % n];
 
     if(p.line_side_of(A, B) != RIGHT) {
       violations += 1;
