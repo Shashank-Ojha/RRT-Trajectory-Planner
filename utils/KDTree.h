@@ -14,21 +14,17 @@
 
 #include "Point.h"
 
-class Node 
+class Node
 {
   public:
     /* Data */
-    Point *point;
+    Point *curr;
     Node *left;
     Node *right;
 
     /* Constructors */
     Node(Point *root);
     Node(Point *root, Node *left, Node *right);
-
-    /* Function Prototypes */
-    bool insert_node(Point *p);
-    Point *find_node(Point *p);
 };
 
 class KDTree
@@ -38,10 +34,12 @@ class KDTree
     Node *root;
 
     /* Constructors */
-    KDTree(Point *root);
+    KDTree(Point *init_pt);
 
     /* Function Prototypes */
     Point *nearest_neighbor(Point *p);
+    bool insert_node(Point *p);
+    Point *find_node(Point *p);
 };
 
 #endif /* __KDTREE_H */

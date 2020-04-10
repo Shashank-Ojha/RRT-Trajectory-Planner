@@ -13,7 +13,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-
+  /*
   // Graph<Point> graph(root);
   Color black = {0, 0, 0};
   Point A(0, 0);
@@ -31,14 +31,19 @@ int main(int argc, char *argv[]) {
   Map m;
   m.add_obstacle(obs);
   cout << m.is_freespace(C) << endl;
-    
+
   // graph.add_edge(root, A);
   // graph.add_edge(root, B);
 
   // cout << graph;
-    
+
   Visualizer v;
   v.init(argc, argv);
   v.plot_obstacle(polygon, black);
   v.run();
+
+  */
+  Point *dbick_pt = new Point(42, 42);
+  KDTree *dbick_tree = new KDTree(dbick_pt);
+  std::cout << dbick_tree->root->curr << "\n";
 }

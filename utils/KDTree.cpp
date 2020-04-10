@@ -12,29 +12,19 @@
 #include "KDTree.h"
 
 Node::Node(Point *root) {
-  (void)root;
+  this->curr = root;
+  this->left = NULL;
+  this->right = NULL;
 }
 
-Node::Node(Point *root, Node *left, Node *right) { 
-  (void)root;
-  (void)left;
-  (void)right;
+Node::Node(Point *root, Node *left, Node *right) {
+  this->curr = root;
+  this->left = left;
+  this->right = right;
 }
 
-/* Function Prototypes */
-bool Node::insert_node(Point *p) {
-  (void)p;
-  return false;
-}
-
-Point *Node::find_node(Point *p) {
-  (void)p;
-  return NULL;
-}
-
-
-KDTree::KDTree(Point *root) {
-  (void)root;
+KDTree::KDTree(Point *init_pt) {
+  Node *root = new Node(init_pt);
 }
 
 Point *KDTree::nearest_neighbor(Point *p) {
@@ -42,4 +32,19 @@ Point *KDTree::nearest_neighbor(Point *p) {
   return NULL;
 }
 
+/* Function Prototypes */
+bool KDTree::insert_node(Point *p) {
+  Node *root = this->root;
+  return false;
+}
 
+/*
+For k-NN search will need a depth parameter to find what dimension to use as
+splitting criterion - formula is depth % k, where depth is how
+many nodes you have searched through (0-indexed) and k is the dimension of the
+points
+*/
+Point *KDTree::find_node(Point *p) {
+  //
+  return NULL;
+}
