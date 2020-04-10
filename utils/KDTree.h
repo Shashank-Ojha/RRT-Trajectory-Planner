@@ -40,11 +40,17 @@ class KDTree
     Point *nearest_neighbor(Point *p);
     bool insert_node(Point *p);
     /*
-    Pass in a bool* - function will change exists == 1 if found, 0 otherwise
-    If exists == 0, Node * will point to last node visited before point was not
-    found 
+    Args:
+    Point *p: (x,y) point that we are looking for in the tree
+    two bool * so the function can set values
+
+    Returns:
+    Node* the last node visited while searching for p
+    bool *exists: 1 if found p is in the kdtree, 0 otherwise
+    bool *go_left: if !exists, go_left gives which direction from the leaf node
+    p would be placed
     */
-    Node *find_node(Point *p, bool *exists);
+    Node *find_node(Point *p, bool *exists, bool *go_left);
 };
 
 #endif /* __KDTREE_H */

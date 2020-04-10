@@ -34,11 +34,27 @@ Point *KDTree::nearest_neighbor(Point *p) {
 
 /* Function Prototypes */
 bool KDTree::insert_node(Point *p) {
+  bool exists; bool go_left;
+  Node *leaf = find_node(p, &exists, &go_left);
+  Node *new_leaf = new Node(p);
+  // TODO do I need to assert exists != NULL and go_left != NULL
+  // assert (exists != NULL && go_left != NULL);
+
+  if (exists) {
+    return true;
+  }
+
+  else {
+    if (go_left) leaf->left = new_leaf;
+    else leaf->right = new_leaf;
+    return true;
+  }
+
   return false;
 }
 
 
-Node *KDTree::find_node(Point *p, bool *exists) {
+Node *KDTree::find_node(Point *p, bool *exists, bool *go_left) {
   // keeps track of how many nodes we've seen to know which dim to check
   int depth = 0;
   // k is the number of dimensions for each point (i.e. kD-tree)
@@ -47,9 +63,10 @@ Node *KDTree::find_node(Point *p, bool *exists) {
 
   // TODO: handle case when root is the only node
 
-  int curr_dim; int split_pt; int p_data;
+  int curr_dim; int split_pt; int p_data; bool is_equal;
 
   cout << "\n";
+  cout << "Find_node: " << " " << p->x << "," << p->y << "\n";
   cout << "before loop" << "\n";
 
   while (curr_node->left != NULL || curr_node->right != NULL) {
@@ -62,41 +79,44 @@ Node *KDTree::find_node(Point *p, bool *exists) {
                       (curr_dim) * curr_node->data->y);
       p_data = ((1 - curr_dim) * p->x +
                       (curr_dim) * p->y);
+
+
       cout << split_pt << "\n";
       cout << p_data << "\n";
-      if (p_data == split_pt) {
-        // set the current dimension to be equal
-        cout << "equal" << "\n";
-        break;
-      }
-      else if (p_data < split_pt) {
+
+      if (p_data < split_pt) {
         cout << "less than" << "\n";
-        break;
         // if we need to go left and there is no left
         if (curr_node->left == NULL) {
-          (*exists) = false;
-          return curr_node;
+          (*go_left) = true;
+          break;
         }
         else {
-          // curr_node = curr_node->left;
+          curr_node = curr_node->left;
         }
       }
-      else { // p_data > split_pt
+      else { // p_data >= split_pt
         cout << "greater than" << "\n";
         // if we need to go right and there is no right
         if (curr_node->right == NULL) {
-          (*exists) = false;
-          return curr_node;
+          (*go_left) = false;
+          break;
         }
         else {
-          // curr_node = curr_node->right;
+          curr_node = curr_node->right;
         }
       }
       cout << "\n";
   }
 
-  (*exists) = false;
-  return NULL;
+  is_equal = (curr_node->data->x == p->x && curr_node->data->y == p->y);
+  (*exists) = is_equal;
+
+  cout << curr_node->data->x << "," << curr_node->data->y << "\n";
+  cout << "exists: " << (*exists) << "\n";
+  cout << "go_left: " << (*go_left) << "\n";
+
+  return curr_node;
 }
 
 
