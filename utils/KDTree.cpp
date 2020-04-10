@@ -12,19 +12,19 @@
 #include "KDTree.h"
 
 Node::Node(Point *root) {
-  this->curr = root;
+  this->data = root;
   this->left = NULL;
   this->right = NULL;
 }
 
 Node::Node(Point *root, Node *left, Node *right) {
-  this->curr = root;
+  this->data = root;
   this->left = left;
   this->right = right;
 }
 
 KDTree::KDTree(Point *init_pt) {
-  Node *root = new Node(init_pt);
+  this->root = new Node(init_pt);
 }
 
 Point *KDTree::nearest_neighbor(Point *p) {

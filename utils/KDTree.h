@@ -18,7 +18,7 @@ class Node
 {
   public:
     /* Data */
-    Point *curr;
+    Point *data; 
     Node *left;
     Node *right;
 

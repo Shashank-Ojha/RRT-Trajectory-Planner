@@ -43,7 +43,12 @@ int main(int argc, char *argv[]) {
   v.run();
 
   */
-  Point *dbick_pt = new Point(42, 42);
+  Point *dbick_pt = new Point(23, 24);
   KDTree *dbick_tree = new KDTree(dbick_pt);
-  std::cout << dbick_tree->root->curr << "\n";
+  std::cout << dbick_tree->root << "\n";
+  std::cout << dbick_tree->root->data << "\n";
+  std::cout << dbick_tree->root->data->x << "\n";
+  std::cout << dbick_tree->root->data->y << "\n";
+
+
 }
