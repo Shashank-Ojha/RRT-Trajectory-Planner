@@ -65,16 +65,32 @@ Node *KDTree::find_node(Point *p, bool *exists) {
       cout << split_pt << "\n";
       cout << p_data << "\n";
       if (p_data == split_pt) {
+        // set the current dimension to be equal
         cout << "equal" << "\n";
         break;
       }
       else if (p_data < split_pt) {
         cout << "less than" << "\n";
         break;
+        // if we need to go left and there is no left
+        if (curr_node->left == NULL) {
+          (*exists) = false;
+          return curr_node;
+        }
+        else {
+          // curr_node = curr_node->left;
+        }
       }
       else { // p_data > split_pt
         cout << "greater than" << "\n";
-        break;
+        // if we need to go right and there is no right
+        if (curr_node->right == NULL) {
+          (*exists) = false;
+          return curr_node;
+        }
+        else {
+          // curr_node = curr_node->right;
+        }
       }
       cout << "\n";
   }
