@@ -42,7 +42,7 @@ int connect(Graph<Point> &graph, Point &goal) {
   return TRAPPED;
 }
 
-double heuristic(Point *n, Point* target) {
+double heuristic(Point *n, Point *target) {
   return n->dist(*target);
 }
 

@@ -33,7 +33,6 @@ class State {
     double g;
 
     /* Constructors */
-    State(Node *data, Node *parent, double cost);
     State(Node *data, Node *parent, double cost, double g);
 };
 
@@ -53,17 +52,15 @@ class Search {
 /****************************************************************************/
 
 
-
-/******      State Functions      ******/
-
-template <typename Node> 
-State<Node>::State(Node *data, Node *parent, double cost) {
-  this->data = data;
-  this->parent = parent;
-  this->cost = cost;
-  this->g = 0;
-}
-
+/**
+ * @brief Constructor for a state
+ * 
+ * @param data Pointer to data.
+ * @param parent Pointer to parent.
+ * @param cost True cost to node.
+ * @param g Estimated cost to goal going through this node.
+ * @return New output stream with graph inside stream.
+ */
 template <typename Node> 
 State<Node>::State(Node *data, Node *parent, double cost, double g) {
   this->data = data;
@@ -72,6 +69,16 @@ State<Node>::State(Node *data, Node *parent, double cost, double g) {
   this->g = g;
 }
 
+/**
+ * @brief Priority function to determine which order to visit states.
+ * 
+ * Note: PQ pick element from the right (which should be the smallest 
+ *  given our ordering).
+ * 
+ * @param A State 1.
+ * @param A State 2.
+ * @return True if B has priority over A (minheap).
+ */
 template <typename Node> 
 struct priority {
   size_t operator()(const State<Node> &A, const State<Node> &B) const {
@@ -81,6 +88,13 @@ struct priority {
 
 /******      Search Functions      ******/
 
+/**
+ * @brief Backtraces up the parents to find full path to target.
+ * 
+ * @param parents Map of parent pointers.
+ * @param target Final state in path.
+ * @return Full path of states from start to target.
+ */
 template <typename Node> 
 vector<Node*> backtrace(unordered_map<Node*, Node*>& parents, Node* target) {
   vector<Node*> path;
@@ -94,6 +108,16 @@ vector<Node*> backtrace(unordered_map<Node*, Node*>& parents, Node* target) {
   return path;
 }
 
+/**
+ * @brief Computes A* search with the given heuristic from start to target
+ * using the provided Graph.
+ * 
+ * @param start Initial state in path.
+ * @param target Final state in path.
+ * @param g Graph to search in.
+ * @param heuristic heuristic function to aid search.
+ * @return Full path of states from start to target or error if not found.
+ */
 template <typename Node> 
 vector<Node*> Search<Node>::a_star(Node *start, Node *target,
                                    Graph<Node> &g,
