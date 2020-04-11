@@ -1,33 +1,60 @@
 /**
- *  @file Search.cpp
- *  @brief Implementation of API defined in Search.h
+ *  @file Search.h
+ *  @brief Defines an API for the search methods
  *
+ *  NOTE: The implementation is also found in this file instead of a separate
+ *  cpp file. This is necessary for templates. For more information see:
+ *    https://isocpp.org/wiki/faq/templates#templates-defn-vs-decl
+ * 
  *  @author Shashank Ojha (shashano)
  *  @author Serris Lew (snlew)
  *  @author David Bick (dbick)
  *  @bug No known bugs.
  */
 
-#ifndef __SEARCH_CPP
-#define __SEARCH_CPP
+#ifndef __SEARCH_H
+#define __SEARCH_H
 
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
 
-#include "utils/Point.h"
-#include "utils/Graph-impl.cpp"
+#include "Graph.h"
 
-#include "Search.h"
+/* Class to keep track of information related to visited states */
+template <typename Node> 
+class State {
+  public:
+    /* Data */
+    Node *data;
+    Node *parent;
+    double cost;
+    double g;
 
-using namespace std;
+    /* Constructors */
+    State(Node *data, Node *parent, double cost);
+    State(Node *data, Node *parent, double cost, double g);
+};
+
+template <typename Node> 
+class Search {
+  public:
+    /* Function Prototypes */
+    static vector<Node*> a_star(Node *start, Node *target, 
+                                Graph<Node> &g, 
+                                double heuristic(Node* n, Node *target));
+};
 
 /****************************************************************************/
 
-                            /* State Functions */
+                            /* Implementation */
 
 /****************************************************************************/
+
+
+
+/******      State Functions      ******/
 
 template <typename Node> 
 State<Node>::State(Node *data, Node *parent, double cost) {
@@ -52,11 +79,7 @@ struct priority {
   }
 };
 
-/****************************************************************************/
-
-                            /* Search Functions */
-
-/****************************************************************************/
+/******      Search Functions      ******/
 
 template <typename Node> 
 vector<Node*> backtrace(unordered_map<Node*, Node*>& parents, Node* target) {
@@ -72,7 +95,9 @@ vector<Node*> backtrace(unordered_map<Node*, Node*>& parents, Node* target) {
 }
 
 template <typename Node> 
-vector<Node*> Search<Node>::a_star(Node *start, Node *target, Graph<Node> &g) {
+vector<Node*> Search<Node>::a_star(Node *start, Node *target,
+                                   Graph<Node> &g,
+                                   double heuristic(Node* n, Node* targset)) {
   priority_queue<State<Node>, vector<State<Node>>, priority<Node>> frontier;
   unordered_map<Node*, Node*> parents;
   unordered_set<Node*> visited;
@@ -92,7 +117,7 @@ vector<Node*> Search<Node>::a_star(Node *start, Node *target, Graph<Node> &g) {
     for (Node *neighbor : g.get_neighbors(state.data)) {
       if (visited.find(neighbor) == visited.end()) {
         double cost = state.cost + state.data->dist(*neighbor);
-        double g = cost + neighbor->dist(*target); /* Add Heuristic */
+        double g = cost + heuristic(neighbor, target); /* Add Heuristic */
         State<Node> newState(neighbor, state.data, cost, g);
         frontier.push(newState);
       }
@@ -103,4 +128,4 @@ vector<Node*> Search<Node>::a_star(Node *start, Node *target, Graph<Node> &g) {
   assert(false);
 }
 
-#endif /* __SEARCH_CPP */
+#endif /* __SEARCH_H */

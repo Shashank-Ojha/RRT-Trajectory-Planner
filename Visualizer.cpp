@@ -12,8 +12,6 @@
 
 #include "utils/Point.h"
 #include "utils/Graph.h"
-#include "utils/Graph-impl.cpp"
-
 
 #include "Visualizer.h"
 

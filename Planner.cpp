@@ -14,12 +14,9 @@
 #include "Planner.h"
 
 #include "utils/Graph.h"
-#include "utils/Graph-impl.cpp"
 #include "utils/Map.h"
 #include "utils/Point.h"
-
-#include "Search.h"
-#include "Search-impl.cpp"
+#include "utils/Search.h"
 
 using namespace std;
 
@@ -43,6 +40,10 @@ int extend(Graph<Point> &graph, Point &goal) {
 int connect(Graph<Point> &graph, Point &goal) {
   //TODO: implement
   return TRAPPED;
+}
+
+double heuristic(Point *n, Point* target) {
+  return n->dist(*target);
 }
 
 /****************************************************************************/

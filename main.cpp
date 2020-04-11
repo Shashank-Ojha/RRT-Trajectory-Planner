@@ -6,12 +6,10 @@
 #include "utils/Map.h"
 #include "utils/Obstacle.h"
 #include "utils/Point.h"
+#include "utils/Search.h"
 
 #include "Planner.h"
-#include "Search.h"
 #include "Visualizer.h"
-
-#include "Search-impl.cpp"
 
 using namespace std;
 string DEFAULT_MAP = "maps/map1.txt"; 
@@ -23,6 +21,10 @@ string parse_args(int argc, char *argv[]) {
   }
 
   return filename;
+}
+
+double heuristic_fn(Point *n, Point* target) {
+  return n->dist(*target);
 }
 
 int main(int argc, char *argv[]) {
@@ -45,7 +47,7 @@ int main(int argc, char *argv[]) {
   g.add_edge(init, med);
   g.add_edge(med, three);
 
-  vector<Point*> path = Search<Point>::a_star(init, three, g);
+  vector<Point*> path = Search<Point>::a_star(init, three, g, heuristic_fn);
 
   for (Point *p : path) {
     cout << *p << endl;
