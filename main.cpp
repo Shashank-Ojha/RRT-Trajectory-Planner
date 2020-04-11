@@ -46,13 +46,20 @@ int main(int argc, char *argv[]) {
   Point *init_pt = new Point(23, 24);
   KDTree *kd_tree = new KDTree(init_pt);
   Point *pt_two = new Point(1, 2);
-  Point *pt_three = new Point(100, 101);
   Point *pt_four = new Point(1, 3);
   bool exists; bool go_left;
 
-  kd_tree->insert_node(pt_two);
-  kd_tree->insert_node(pt_three);
-  kd_tree->insert_node(pt_four);
+
+  //kd_tree->insert_node(pt_two);
+  kd_tree->insert_node(new Point(100, 101));
+  //kd_tree->insert_node(pt_four);
+  //kd_tree->insert_node(new Point(100, 100));
+  kd_tree->insert_node(new Point(100, 100));
+  kd_tree->insert_node(new Point(105, 90));
+  kd_tree->insert_node(new Point(100, 100));
+  kd_tree->insert_node(new Point(20, 24));
+  kd_tree->insert_node(new Point(20, 20));
+  kd_tree->insert_node(new Point(100, 102));
 
   kd_tree->print_inorder();
 

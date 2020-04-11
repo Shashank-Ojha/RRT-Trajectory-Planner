@@ -32,95 +32,117 @@ Point *KDTree::nearest_neighbor(Point *p) {
   return NULL;
 }
 
-/* Function Prototypes */
-bool KDTree::insert_node(Point *p) {
-  bool exists; bool go_left;
-  Node *leaf = find_node(p, &exists, &go_left);
-  Node *new_leaf = new Node(p);
-  // TODO do I need to assert exists != NULL and go_left != NULL
-  // assert (exists != NULL && go_left != NULL);
+/*int set_dir(Point *A, Point *B, int *dir) {
+  if (A.equals(B)) (*dir) = EXISTS;
+  else if (A.at(0) )
+}*/
 
-  if (exists) {
+/* Function Prototypes */
+Node *find_node_helper(Point *p, Node* start_node, int *dir) {
+  // keeps track of how many nodes we've seen to know which dim to check
+  int depth = 0;
+  // k is the number of dimensions for each point (i.e. kD-tree)
+  int k = 2;
+  Node *curr_node = start_node;
+
+  // if only node is root
+  if (curr_node->left == NULL && curr_node->right == NULL) {
+      if (p->x < curr_node->data->x) (*dir) = LEFT;
+      else (*dir) = RIGHT;
+      return curr_node;
+  }
+
+  int curr_dim; int split_pt; int p_data; bool is_equal;
+  while (curr_node->left != NULL || curr_node->right != NULL) {
+      cout << "main loop" << "\n";
+      curr_dim = depth % k;
+      cout << "curr_dim: " << curr_dim << "\n";
+
+      // check for equality at every interior node
+      if (curr_node->data->equals(p)) {
+        cout << "Interior found" << "\n";
+        (*dir) = EXISTS;
+        return curr_node;
+      }
+
+      // choose the correct splitting dimension for kd-tree node
+      split_pt = curr_node->data->at(curr_dim);
+      p_data = p->at(curr_dim);
+      cout << "tree[curr_dim]: " << split_pt << "\n";
+      cout << "p[curr_dim]: " << p_data << "\n";
+      if (p_data < split_pt) {
+        cout << "left" << "\n";
+        if (curr_node->left == NULL) { // if we need to go left and there is no left
+          cout << "can't go left" << '\n';
+          (*dir) = LEFT; break;
+        }
+        else {
+          cout << "going left" << '\n';
+          curr_node = curr_node->left;
+          depth++;
+        }
+      }
+      else { // p_data >= split_pt
+        cout << "right" << "\n";
+        if (curr_node->right == NULL) { // if we need to go right and there is no right
+          cout << "can't go right" << '\n';
+          (*dir) = RIGHT; break;
+        }
+        else {
+          cout << "going right" << '\n';
+
+          curr_node = curr_node->right;
+          depth++;
+        }
+      }
+  }
+
+  cout << "after main loop" << '\n';
+  cout << "depth " << depth << '\n';
+  cout << curr_node->data->at(depth % k) << "," <<  p->at(depth % k)<< '\n';
+
+  if (curr_node->data->equals(p)) (*dir) = EXISTS;
+  else if (p->at(depth % k) < curr_node->data->at(depth % k)) (*dir) = LEFT;
+  else (*dir) = RIGHT;
+  return curr_node;
+}
+
+bool KDTree::insert_node(Point *p) {
+  int dir;
+
+  cout << "Inserting " << p->x << ", " << p->y << '\n';
+  Node *leaf = find_node_helper(p, this->root, &dir);
+  Node *new_leaf = new Node(p);
+
+  if (dir == EXISTS) { // node is already in the tree
+    cout << "already exists" << "\n";
+    cout << '\n';
     return true;
   }
 
   else {
-    if (go_left) leaf->left = new_leaf;
+    cout << "point didnt exist" << '\n';
+    cout << "adding to " << dir << " direction" << '\n';
+    if (dir == LEFT) leaf->left = new_leaf;
     else leaf->right = new_leaf;
+    cout << '\n';
     return true;
   }
 
   return false;
 }
 
-
-Node *KDTree::find_node(Point *p, bool *exists, bool *go_left) {
-  // keeps track of how many nodes we've seen to know which dim to check
-  int depth = 0;
-  // k is the number of dimensions for each point (i.e. kD-tree)
-  int k = 2;
-  Node *curr_node = this->root;
-
-  // if only node is root
-  if (curr_node->left == NULL && curr_node->right == NULL) {
-      (*exists) = false; (*go_left) = (p->x < curr_node->data->x);
-      return curr_node;
+Node *KDTree::find_node(Point *p) {
+  int dir;
+  Node *leaf = find_node_helper(p, this->root, &dir);
+  // if dir == NULL the node exists, because there is no need to go to the
+  // left or right to insert
+  if (dir == EXISTS) {
+    return leaf;
   }
-
-
-  int curr_dim; int split_pt; int p_data; bool is_equal;
-
-  cout << "\n";
-  cout << "Find_node: " << " " << p->x << "," << p->y << "\n";
-  cout << "before loop" << "\n";
-
-  while (curr_node->left != NULL || curr_node->right != NULL) {
-      cout << "inside loop" << "\n";
-      curr_dim = depth % k;
-      depth++;
-
-      // choose the correct x or y so don't need a bunch of if-else
-      split_pt = ((1 - curr_dim) * curr_node->data->x +
-                      (curr_dim) * curr_node->data->y);
-      p_data = ((1 - curr_dim) * p->x +
-                      (curr_dim) * p->y);
-
-
-      cout << split_pt << "\n";
-      cout << p_data << "\n";
-
-      if (p_data < split_pt) {
-        cout << "less than" << "\n";
-        // if we need to go left and there is no left
-        if (curr_node->left == NULL) {
-          (*go_left) = true;
-          break;
-        }
-        else {
-          curr_node = curr_node->left;
-        }
-      }
-      else { // p_data >= split_pt
-        cout << "greater than" << "\n";
-        // if we need to go right and there is no right
-        if (curr_node->right == NULL) {
-          (*go_left) = false;
-          break;
-        }
-        else {
-          curr_node = curr_node->right;
-        }
-      }
+  else {
+    return NULL;
   }
-
-  is_equal = (curr_node->data->x == p->x && curr_node->data->y == p->y);
-  (*exists) = is_equal;
-
-  cout << curr_node->data->x << "," << curr_node->data->y << "\n";
-  cout << "exists: " << (*exists) << "\n";
-  cout << "go_left: " << (*go_left) << "\n";
-
-  return curr_node;
 }
 
 void inorder_traversal_helper(Node *node) {
@@ -140,6 +162,7 @@ void KDTree::print_inorder()
     cout << '\n';
     Node *node = this->root;
     inorder_traversal_helper(node);
+    cout << '\n';
 }
 
 /*

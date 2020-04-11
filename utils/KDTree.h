@@ -14,6 +14,11 @@
 
 #include "Point.h"
 
+/* Constants for direction of node placement */
+#define LEFT -1
+#define RIGHT 1
+#define EXISTS 0
+
 class Node
 {
   public:
@@ -39,19 +44,8 @@ class KDTree
     /* Function Prototypes */
     Point *nearest_neighbor(Point *p);
     bool insert_node(Point *p);
-    /*
-    Args:
-    Point *p: (x,y) point that we are looking for in the tree
-    two bool * so the function can set values
-
-    Returns:
-    Node* the last node visited while searching for p
-    bool *exists: 1 if found p is in the kdtree, 0 otherwise
-    bool *go_left: if !exists, go_left gives which direction from the leaf node
-    p would be placed
-    */
-    Node *find_node(Point *p, bool *exists, bool *go_left);
-    void print_inorder(); 
+    Node *find_node(Point *p);
+    void print_inorder();
 };
 
 

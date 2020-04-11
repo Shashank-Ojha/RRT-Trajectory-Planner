@@ -2,7 +2,7 @@
 
 /**
  *  @file Obstacle.h
- *  @brief Defines a class Point to keep track of (x,y) points and utility 
+ *  @brief Defines a class Point to keep track of (x,y) points and utility
  *  functions for them
  *
  *  @author Shashank Ojha (shashano)
@@ -42,6 +42,9 @@ class Point
     double cross(Point &other);
     double dist(Point &other);
     int line_side_of(Point &A, Point &B);
+
+    bool equals(Point *other);
+    double at(int dimension);
 
     /* Output Stream Definition */
     friend ostream& operator<<(ostream& os, const Point& p);

@@ -43,11 +43,11 @@ Point::Point(double x, double y) {
  * @param other Point to add.
  * @return Point containing sum of this point and other point.
  */
-Point Point::operator + (Point const &other) { 
-      Point res; 
-      res.x = this->x + other.x; 
-      res.y = this->y + other.y; 
-      return res; 
+Point Point::operator + (Point const &other) {
+      Point res;
+      res.x = this->x + other.x;
+      res.y = this->y + other.y;
+      return res;
 }
 
 /**
@@ -56,11 +56,11 @@ Point Point::operator + (Point const &other) {
  * @param other Point to subtract.
  * @return Point containing difference between this point and other point.
  */
-Point Point::operator - (Point const &other) { 
-      Point res; 
-      res.x = this->x - other.x; 
-      res.y = this->y - other.y; 
-      return res; 
+Point Point::operator - (Point const &other) {
+      Point res;
+      res.x = this->x - other.x;
+      res.y = this->y - other.y;
+      return res;
 }
 
 /**
@@ -115,9 +115,23 @@ int Point::line_side_of(Point &A, Point &B) {
   return ON;
 }
 
+bool float_equals(double x, double y) {
+  double epsilon = 0.000000001;
+  return fabs(x - y) < epsilon;
+}
+
+bool Point::equals(Point *other) {
+  return float_equals(this->x, other->x) && float_equals(this->y, other->y);
+}
+
+double Point::at(int dimension) {
+  if (dimension == 0) return this->x;
+  else return this->y;
+}
+
 /**
  * @brief Adds support for printing Points.
- * 
+ *
  * @param os Output stream.
  * @param p Point Object.
  * @return New output stream with point inside stream.
