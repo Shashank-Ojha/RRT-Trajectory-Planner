@@ -60,6 +60,8 @@ int main(int argc, char *argv[]) {
   kd_tree->insert_node(new Point(20, 24));
   kd_tree->insert_node(new Point(20, 20));
   kd_tree->insert_node(new Point(100, 102));
+  cout << kd_tree->find_node(new Point(100, 102)) << "\n";
+  cout << kd_tree->find_node(new Point(42, 42)) << "\n";
 
   kd_tree->print_inorder();
 

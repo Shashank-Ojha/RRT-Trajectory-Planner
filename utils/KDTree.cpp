@@ -32,10 +32,17 @@ Point *KDTree::nearest_neighbor(Point *p) {
   return NULL;
 }
 
-/*int set_dir(Point *A, Point *B, int *dir) {
-  if (A.equals(B)) (*dir) = EXISTS;
-  else if (A.at(0) )
-}*/
+int get_decision(Point *curr_pt, Point *p, int curr_dim) {
+  if (curr_pt->equals(p)) {
+    return EXISTS;
+  }
+  else if (p->at(curr_dim) < curr_pt->at(curr_dim)) {
+    return LEFT;
+  }
+  else {
+    return RIGHT;
+  }
+}
 
 /* Function Prototypes */
 Node *find_node_helper(Point *p, Node* start_node, int *dir) {
@@ -44,99 +51,68 @@ Node *find_node_helper(Point *p, Node* start_node, int *dir) {
   // k is the number of dimensions for each point (i.e. kD-tree)
   int k = 2;
   Node *curr_node = start_node;
-
-  // if only node is root
-  if (curr_node->left == NULL && curr_node->right == NULL) {
-      if (p->x < curr_node->data->x) (*dir) = LEFT;
-      else (*dir) = RIGHT;
-      return curr_node;
-  }
-
-  int curr_dim; int split_pt; int p_data; bool is_equal;
+  int curr_dim; int split_pt; int p_data; bool is_equal; int decision;
+  // if we are not at a leaf
   while (curr_node->left != NULL || curr_node->right != NULL) {
-      cout << "main loop" << "\n";
       curr_dim = depth % k;
-      cout << "curr_dim: " << curr_dim << "\n";
 
-      // check for equality at every interior node
-      if (curr_node->data->equals(p)) {
-        cout << "Interior found" << "\n";
-        (*dir) = EXISTS;
+      // checks if points are equal, and if not which branch to traverse,
+      // given the correct dim
+      decision = get_decision(curr_node->data, p, curr_dim);
+
+      if (decision == EXISTS) {
+        (*dir) = decision;
         return curr_node;
       }
 
-      // choose the correct splitting dimension for kd-tree node
-      split_pt = curr_node->data->at(curr_dim);
-      p_data = p->at(curr_dim);
-      cout << "tree[curr_dim]: " << split_pt << "\n";
-      cout << "p[curr_dim]: " << p_data << "\n";
-      if (p_data < split_pt) {
-        cout << "left" << "\n";
+      else if (decision == LEFT) {
         if (curr_node->left == NULL) { // if we need to go left and there is no left
-          cout << "can't go left" << '\n';
-          (*dir) = LEFT; break;
+          (*dir) = decision;
+          break;
         }
         else {
-          cout << "going left" << '\n';
-          curr_node = curr_node->left;
-          depth++;
+          curr_node = curr_node->left; // proceed to left
+          depth++; // increment depth because we are visiting another node
         }
       }
-      else { // p_data >= split_pt
-        cout << "right" << "\n";
+
+      else {
         if (curr_node->right == NULL) { // if we need to go right and there is no right
-          cout << "can't go right" << '\n';
-          (*dir) = RIGHT; break;
+          (*dir) = decision; break; // break because
         }
         else {
-          cout << "going right" << '\n';
-
-          curr_node = curr_node->right;
-          depth++;
+          curr_node = curr_node->right; // proceed to the right
+          depth++; // increment depth because we are visiting another node
         }
       }
   }
-
-  cout << "after main loop" << '\n';
-  cout << "depth " << depth << '\n';
-  cout << curr_node->data->at(depth % k) << "," <<  p->at(depth % k)<< '\n';
-
-  if (curr_node->data->equals(p)) (*dir) = EXISTS;
-  else if (p->at(depth % k) < curr_node->data->at(depth % k)) (*dir) = LEFT;
-  else (*dir) = RIGHT;
+  // we have reached a leaf and need to make our last decision
+  // note: if tree is just root, will come straight here
+  decision = get_decision(curr_node->data, p, (depth % k));
+  (*dir) = decision;
   return curr_node;
 }
 
 bool KDTree::insert_node(Point *p) {
   int dir;
-
-  cout << "Inserting " << p->x << ", " << p->y << '\n';
+  // traverse the kdtree looking for our node
   Node *leaf = find_node_helper(p, this->root, &dir);
-  Node *new_leaf = new Node(p);
-
-  if (dir == EXISTS) { // node is already in the tree
-    cout << "already exists" << "\n";
-    cout << '\n';
+  if (dir == EXISTS) { // node is already in the tree, don't need to do anything
     return true;
   }
-
   else {
-    cout << "point didnt exist" << '\n';
-    cout << "adding to " << dir << " direction" << '\n';
+    // create new leaf because we did not find the node we want to insert
+    Node *new_leaf = new Node(p);
     if (dir == LEFT) leaf->left = new_leaf;
-    else leaf->right = new_leaf;
-    cout << '\n';
+    else if (dir == RIGHT) leaf->right = new_leaf;
+    else cout << "?" << '\n'; return false;
     return true;
   }
-
-  return false;
 }
 
 Node *KDTree::find_node(Point *p) {
   int dir;
   Node *leaf = find_node_helper(p, this->root, &dir);
-  // if dir == NULL the node exists, because there is no need to go to the
-  // left or right to insert
   if (dir == EXISTS) {
     return leaf;
   }
@@ -148,7 +124,6 @@ Node *KDTree::find_node(Point *p) {
 void inorder_traversal_helper(Node *node) {
   if (node == NULL)
       return;
-
   /* first recur on left child */
   inorder_traversal_helper(node->left);
   /* then print the data of node */
