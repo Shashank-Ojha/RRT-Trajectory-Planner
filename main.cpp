@@ -8,7 +8,10 @@
 #include "utils/Point.h"
 
 #include "Planner.h"
+#include "Search.h"
 #include "Visualizer.h"
+
+#include "Search-impl.cpp"
 
 using namespace std;
 string DEFAULT_MAP = "maps/map1.txt"; 
@@ -24,10 +27,29 @@ string parse_args(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 
-  Color black = {0, 0, 0};
+  // Color black = {0, 0, 0};
 
   string filename = parse_args(argc, argv);
   cout << filename << endl;
+
+  Point *init = new Point();
+  Point *one = new Point(1, 0);
+  Point *two = new Point(2, 0);
+  Point *three = new Point(3, 0);
+  Point *med = new Point(1, 1);
+
+  Graph<Point> g(init);
+  g.add_edge(init, one);
+  g.add_edge(one, two);
+  g.add_edge(two, three);
+  g.add_edge(init, med);
+  g.add_edge(med, three);
+
+  vector<Point*> path = Search<Point>::a_star(init, three, g);
+
+  for (Point *p : path) {
+    cout << *p << endl;
+  }
 
   Map map = Map(filename);
   

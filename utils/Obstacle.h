@@ -15,8 +15,7 @@
 
 #include "Point.h"
 
-class Obstacle
-{
+class Obstacle {
   public:
     /* Data */
     vector<Point> convex_hull;

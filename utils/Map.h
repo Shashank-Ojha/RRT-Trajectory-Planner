@@ -17,8 +17,7 @@
 #include "Point.h"
 #include "Obstacle.h"
 
-class Map
-{
+class Map {
   public:
     /* Data */
     float height;

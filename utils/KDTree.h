@@ -14,8 +14,7 @@
 
 #include "Point.h"
 
-class Node 
-{
+class Node {
   public:
     /* Data */
     Point *point;
@@ -31,8 +30,7 @@ class Node
     Point *find_node(Point *p);
 };
 
-class KDTree
-{
+class KDTree {
   public:
     /* Data */
     Node *root;

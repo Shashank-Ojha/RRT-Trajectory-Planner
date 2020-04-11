@@ -12,6 +12,8 @@
 
 #include "utils/Point.h"
 #include "utils/Graph.h"
+#include "utils/Graph-impl.cpp"
+
 
 #include "Visualizer.h"
 
@@ -61,8 +63,8 @@ void Visualizer::plot_trajectory(vector<Point> &trajectory, Color &node_color, C
 
 void Visualizer::plot_graph(Graph<Point> &graph, Color &node_color, Color &edge_color) {
     // need to rescale points after given array of points
-    unordered_map<Point*, unordered_set<Point*>>::iterator it = graph.edges.begin();
-    while (it != graph.edges.end()) {
+    unordered_map<Point*, unordered_set<Point*>>::iterator it = graph.adj_list.begin();
+    while (it != graph.adj_list.end()) {
         Point *p1 = it->first;
         for (auto p2 : it->second) {
             plot_segment(*p1, *p2, node_color, edge_color);

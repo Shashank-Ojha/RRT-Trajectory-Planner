@@ -23,8 +23,7 @@
 
 using namespace std;
 
-class Point
-{
+class Point {
   public:
     /* Data */
     double x;

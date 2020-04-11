@@ -3,11 +3,14 @@ APP_NAME = plan
 
 OBJS = main.o \
 			 utils/Graph.o \
+			 utils/Graph-impl.o \
 			 utils/KDTree.o \
 			 utils/Map.o \
 			 utils/Obstacle.o \
 			 utils/Point.o \
 			 Planner.o \
+			 Search.o \
+			 Search-impl.o \
 			 Visualizer.o
 
 CXX = g++
@@ -25,4 +28,4 @@ utils/%.o: utils/%.cpp utils/%.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@ 
 
 clean:
-	rm *.o utils/*.o plan
+	rm *.o utils/*.o $(APP_NAME)

@@ -14,12 +14,21 @@
 #include "Planner.h"
 
 #include "utils/Graph.h"
+#include "utils/Graph-impl.cpp"
 #include "utils/Map.h"
 #include "utils/Point.h"
 
+#include "Search.h"
+#include "Search-impl.cpp"
+
 using namespace std;
 
-/* Helper Functions */
+/****************************************************************************/
+
+                            /* Helper Functions */
+
+/****************************************************************************/
+
 Point sample(float width, float height) {
   double x = ((double) rand() / (RAND_MAX)) * width;    /* 0 <= x < width */
   double y = ((double) rand() / (RAND_MAX)) * height;   /* 0 <= y < height */
@@ -36,6 +45,11 @@ int connect(Graph<Point> &graph, Point &goal) {
   return TRAPPED;
 }
 
+/****************************************************************************/
+
+                            /* API Implementations */
+
+/****************************************************************************/
 
 vector<Point> Planner::RRT(Point &start, Point &goal, Map &map) {
   //TODO: implement
