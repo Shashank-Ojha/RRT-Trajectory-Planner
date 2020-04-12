@@ -28,7 +28,10 @@ KDTree::KDTree(Point *init_pt) {
 }
 
 Point *KDTree::nearest_neighbor(Point *p) {
-  (void)p;
+  Node *guess = NULL;
+  int best_dist = INT_MAX;
+
+  Node *curr_node =
   return NULL;
 }
 
