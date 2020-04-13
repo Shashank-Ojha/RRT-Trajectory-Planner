@@ -36,7 +36,10 @@ NodeDist::NodeDist(Node *node, int dist) {
 
 bool NodeDist::compare_dist(NodeDist *other) {
   if (other == NULL) {
-    cout << "comparing with NULL" << "\n";
+		/*
+		don't change anything because NULL is not better
+		*/
+		return false;
   }
   if (other->dist < this->dist) {
     this->node = other->node;
@@ -62,13 +65,13 @@ bool NodeDist::compare_dist(NodeDist *other) {
  */
 NodeDist *nearest_neighbor_helper(Node *curr_node, NodeDist* best_so_far,
                                   Node* test, int depth) {
-  if (curr_node == NULL) return NULL;
-  // TODO dealing with NULL's ?
-
+  if (curr_node == NULL) {
+		return NULL;
+	}
   // check current node
   int curr_dist = test->node_dist(curr_node);
-  NodeDist *curr_node_dist = new NodeDist(curr_node, curr_dist);
-  bool found_closer_nn = best_so_far->compare_dist(curr_node_dist);
+  NodeDist *possible = new NodeDist(curr_node, curr_dist);
+  bool found_closer_nn = best_so_far->compare_dist(possible);
 
   // check left or right node depending on curr_dim
   int k = 2; /* number of dimensions */
@@ -77,29 +80,31 @@ NodeDist *nearest_neighbor_helper(Node *curr_node, NodeDist* best_so_far,
   if (test->data->at(curr_dim) < curr_node->data->at(curr_dim)) { // proceed left
     depth++;
     dir = LEFT;
-    best_so_far = (nearest_neighbor_helper(curr_node->left, best_so_far,
+    possible = (nearest_neighbor_helper(curr_node->left, best_so_far,
                                           test, depth));
   }
   else { // proceed down tree to the right
     depth++;
     dir = RIGHT;
-    best_so_far = (nearest_neighbor_helper(curr_node->right, best_so_far,
+    possible = (nearest_neighbor_helper(curr_node->right, best_so_far,
                                           test, depth));
   }
 
+	found_closer_nn = best_so_far->compare_dist(possible);
   /* have to check opposite side of split if the hypersphere centered at test
   with radius best_dist crosses the splitting boundary */
   int radius = fabs((test->data->at(curr_dim) - curr_node->data->at(curr_dim)));
   if (radius < best_so_far->dist) {
     if (dir == LEFT)  {
-      best_so_far = (nearest_neighbor_helper(curr_node->right, best_so_far,
+      possible = (nearest_neighbor_helper(curr_node->right, best_so_far,
                                             test, depth));
     }
     else {
-      best_so_far = (nearest_neighbor_helper(curr_node->left, best_so_far,
+      possible = (nearest_neighbor_helper(curr_node->left, best_so_far,
                                             test, depth));
     }
   }
+	found_closer_nn = best_so_far->compare_dist(possible);
   return best_so_far;
 }
 
@@ -208,10 +213,10 @@ Node *KDTree::find_node(Point *p) {
 }
 
 void inorder_traversal_helper(Node *node) {
-  if (node == NULL)
-      return;
+	if (node == NULL)
+  	return;
   /* first recur on left child */
-  inorder_traversal_helper(node->left);
+	inorder_traversal_helper(node->left);
   /* then print the data of node */
   cout << node->data->x << "," << node->data->y << "\n";
   /* now recur on right child */
@@ -220,8 +225,8 @@ void inorder_traversal_helper(Node *node) {
 
 void KDTree::print_inorder()
 {
-    cout << '\n';
-    Node *node = this->root;
-    inorder_traversal_helper(node);
-    cout << '\n';
+	cout << '\n';
+  Node *node = this->root;
+  inorder_traversal_helper(node);
+  cout << '\n';
 }

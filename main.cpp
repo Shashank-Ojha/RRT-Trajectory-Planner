@@ -29,7 +29,6 @@ double heuristic_fn(Point *n, Point* target) {
   return n->dist(*target);
 }
 
-
 void example1(int argc, char *argv[], Map &map) {
     Color black = {0, 0, 0};
     Color red = {1, 0, 0};
@@ -50,6 +49,36 @@ void example1(int argc, char *argv[], Map &map) {
      }
 //    v.plot_graph(graph, black, green);
     v.run();
+}
+
+void nn_test(KDTree* tree, Point *p) {
+	Point *nn = tree->nearest_neighbor(p);
+	cout << "Testing point " << p->x << "," << p->y << endl;
+	cout << "Neighbor " << nn->x << "," << nn->y << endl;
+}
+
+void kd_tree_testing_suite() {
+  Point *init_pt = new Point(23, 24);
+  KDTree *kd_tree = new KDTree(init_pt);
+  kd_tree->insert_node(new Point(100, 101));
+  kd_tree->insert_node(new Point(100, 100));
+  kd_tree->insert_node(new Point(105, 90));
+  kd_tree->insert_node(new Point(100, 100));
+  kd_tree->insert_node(new Point(20, 24));
+  kd_tree->insert_node(new Point(20, 20));
+  kd_tree->insert_node(new Point(100, 102));
+  kd_tree->insert_node(new Point(2.7, 3.14));
+  cout << kd_tree->find_node(new Point(100, 102)) << "\n";
+  cout << kd_tree->find_node(new Point(42, 42)) << "\n";
+
+  kd_tree->print_inorder();
+
+  nn_test(kd_tree, new Point(25, 25));
+  nn_test(kd_tree, new Point(100, 100));
+  nn_test(kd_tree, new Point(101, 101));
+  nn_test(kd_tree, new Point(101, 100));
+  nn_test(kd_tree, new Point(200, 200));
+  nn_test(kd_tree, new Point(0.5, 0.5));
 }
 
 int main(int argc, char *argv[]) {
