@@ -8,6 +8,8 @@
  *  @bug No known bugs.
  */
 
+#include <math.h>
+
 #include "Point.h"
 #include "KDTree.h"
 
@@ -23,16 +25,97 @@ Node::Node(Point *root, Node *left, Node *right) {
   this->right = right;
 }
 
+double Node::node_dist(Node *other) {
+  return this->data->dist((other->data));
+}
+
+NodeDist::NodeDist(Node *node, int dist) {
+  this->node = node;
+  this->dist = dist;
+}
+
+bool NodeDist::compare_dist(NodeDist *other) {
+  if (other == NULL) {
+    cout << "comparing with NULL" << "\n";
+  }
+  if (other->dist < this->dist) {
+    this->node = other->node;
+    this->dist = other->dist;
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+/* Args
+   curr_node:   The node within the kd-tree that you are comparing with to see
+              which direction to go, also comparing the distance at that node
+   best_so_far: A NodeDist class that keeps track of the Node* that is closest
+              to test, as well as the corresponding distance
+   test:        The point we are trying to find a neighbor of
+   depth:     Number of node we have seen, tells us which dimension to compare
+              with
+
+   Returns
+   A NodeDist object giving the closest neighbor and the corresponding distance
+ */
+NodeDist *nearest_neighbor_helper(Node *curr_node, NodeDist* best_so_far,
+                                  Node* test, int depth) {
+  if (curr_node == NULL) return NULL;
+  // TODO dealing with NULL's ?
+
+  // check current node
+  int curr_dist = test->node_dist(curr_node);
+  NodeDist *curr_node_dist = new NodeDist(curr_node, curr_dist);
+  bool found_closer_nn = best_so_far->compare_dist(curr_node_dist);
+
+  // check left or right node depending on curr_dim
+  int k = 2; /* number of dimensions */
+  int curr_dim = depth % k;
+  int dir; // to check if we need to look across the split
+  if (test->data->at(curr_dim) < curr_node->data->at(curr_dim)) { // proceed left
+    depth++;
+    dir = LEFT;
+    best_so_far = (nearest_neighbor_helper(curr_node->left, best_so_far,
+                                          test, depth));
+  }
+  else { // proceed down tree to the right
+    depth++;
+    dir = RIGHT;
+    best_so_far = (nearest_neighbor_helper(curr_node->right, best_so_far,
+                                          test, depth));
+  }
+
+  /* have to check opposite side of split if the hypersphere centered at test
+  with radius best_dist crosses the splitting boundary */
+  int radius = fabs((test->data->at(curr_dim) - curr_node->data->at(curr_dim)));
+  if (radius < best_so_far->dist) {
+    if (dir == LEFT)  {
+      best_so_far = (nearest_neighbor_helper(curr_node->right, best_so_far,
+                                            test, depth));
+    }
+    else {
+      best_so_far = (nearest_neighbor_helper(curr_node->left, best_so_far,
+                                            test, depth));
+    }
+  }
+  return best_so_far;
+}
+
 KDTree::KDTree(Point *init_pt) {
   this->root = new Node(init_pt);
 }
 
 Point *KDTree::nearest_neighbor(Point *p) {
-  Node *guess = NULL;
-  int best_dist = INT_MAX;
-
-  Node *curr_node =
-  return NULL;
+  NodeDist *best_so_far = new NodeDist(NULL, INT_MAX);
+  Node *curr_node = this->root;
+  Node *test = new Node(p);
+  NodeDist *node_dist = nearest_neighbor_helper(curr_node, best_so_far, test, 0);
+  int best_dist = node_dist->dist;
+  Node* nn_node = node_dist->node;
+  // want to return the point b/c node interface is unncessary
+  return nn_node->data;
 }
 
 int get_decision(Point *curr_pt, Point *p, int curr_dim) {
