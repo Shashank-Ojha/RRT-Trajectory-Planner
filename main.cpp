@@ -12,7 +12,7 @@
 #include "Visualizer.h"
 
 using namespace std;
-string DEFAULT_MAP = "maps/map1.txt"; 
+string DEFAULT_MAP = "maps/map1.txt";
 
 string parse_args(int argc, char *argv[]) {
   string filename = DEFAULT_MAP;
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
   }
 
   Map map = Map(filename);
-  
+
   // Visualizer v;
   // v.init(argc, argv);
   // v.plot_obstacle(polygon, black);
