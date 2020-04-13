@@ -40,6 +40,7 @@ class Point {
     double dot(const Point &other) const;
     double cross(const Point &other) const;
     double dist(const Point &other) const;
+    double angle(const Point &other) const;
     int line_side_of(const Point &A, const Point &B) const;
 
     bool equals(Point *other);

@@ -87,11 +87,23 @@ double Point::cross(const Point &other) const {
  * @brief Computes distance between two points.
  *
  * @param other Point to cross against.
- * @return Cross product of two points.
+ * @return Distance between two points.
  */
 double Point::dist(const Point &other) const {
   Point delta = other - *this;
   return sqrt(delta.dot(delta));
+}
+
+/**
+ * @brief Computes angle between two points.
+ *
+ * @param other Point to cross against.
+ * @return Angle x axis and two points in radians
+ */
+double Point::angle(const Point &other) const {
+    double r = this->dist(other);
+    double dx = this->x - other.x;
+    return acos (dx / r);
 }
 
 /**

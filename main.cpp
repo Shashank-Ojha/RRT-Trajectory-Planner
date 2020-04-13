@@ -11,6 +11,8 @@
 #include "Planner.h"
 #include "Visualizer.h"
 
+#define GL_SILENCE_DEPRECATION
+
 using namespace std;
 string DEFAULT_MAP = "maps/map1.txt";
 
@@ -27,9 +29,30 @@ double heuristic_fn(Point *n, Point* target) {
   return n->dist(*target);
 }
 
-int main(int argc, char *argv[]) {
 
-  // Color black = {0, 0, 0};
+void example1(int argc, char *argv[], Map &map) {
+    Color black = {0, 0, 0};
+    Color red = {1, 0, 0};
+    Color blue = {0, 0, 1};
+    Color green = {0, 1, 0};
+    
+    Point *start = new Point(-1, -3);
+    Point *goal = new Point(9, 5);
+    
+    Graph graph = Planner::RRT(*start, *goal, map);
+    
+    Visualizer v;
+    v.init(argc, argv);
+    v.plot_point(*start, red);
+    v.plot_point(*goal, blue);
+     for (Obstacle obs : map.obstacles) {
+         v.plot_obstacle(obs.convex_hull, black);
+     }
+//    v.plot_graph(graph, black, green);
+    v.run();
+}
+
+int main(int argc, char *argv[]) {
 
   string filename = parse_args(argc, argv);
   cout << filename << endl;
@@ -54,9 +77,7 @@ int main(int argc, char *argv[]) {
   }
 
   Map map = Map(filename);
-
-  // Visualizer v;
-  // v.init(argc, argv);
-  // v.plot_obstacle(polygon, black);
-  // v.run();
+    
+  example1(argc, argv, map);
 }
+

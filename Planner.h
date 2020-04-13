@@ -27,7 +27,8 @@ class Planner {
   
   public:
     /* Function Prototypes */
-    static vector<Point> RRT(Point &start, Point &goal, Map &map);
+//    static vector<Point> RRT(Point &start, Point &goal, Map &map);
+    static Graph<Point> RRT(Point &start, Point &goal, Map &map);
     static vector<Point> RRT_star(Point &start, Point &goal, Map &map);
 };
 
