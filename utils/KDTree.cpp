@@ -26,7 +26,7 @@ Node::Node(Point *root, Node *left, Node *right) {
 }
 
 double Node::node_dist(Node *other) {
-  return this->data->dist((other->data));
+  return this->data->dist(*(other->data));
 }
 
 NodeDist::NodeDist(Node *node, int dist) {
