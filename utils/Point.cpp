@@ -43,19 +43,11 @@ Point::Point(const double x, const double y) {
  * @param other Point to add.
  * @return Point containing sum of this point and other point.
  */
-<<<<<<< HEAD
 Point  Point::operator + (const Point &other) const {
   Point res;
   res.x = this->x + other.x;
   res.y = this->y + other.y;
   return res;
-=======
-Point Point::operator + (Point const &other) {
-      Point res;
-      res.x = this->x + other.x;
-      res.y = this->y + other.y;
-      return res;
->>>>>>> buggy_input
 }
 
 /**
