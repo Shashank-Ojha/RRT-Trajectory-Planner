@@ -63,14 +63,19 @@ bool Obstacle::is_convex_hull(const vector<Point> &polygon) {
 bool Obstacle::collides(const Point &p) const {
   int n = this->convex_hull.size();
 
-  int violations = 0;
+  int cc_violations = 0; /* counter-clockwise assumption */
+  int c_violations = 0;  /* clockwise assumption */
   for (int i = 0; i < n; i++) {
     const Point &A = this->convex_hull[i];
     const Point &B = this->convex_hull[(i+1) % n];
 
     if(p.line_side_of(A, B) != RIGHT) {
-      violations += 1;
+      cc_violations += 1;
+    }
+
+    if(p.line_side_of(A, B) != LEFT) {
+      c_violations += 1;
     }
   }
-  return violations == n;
+  return cc_violations == n || c_violations == n;
 }
