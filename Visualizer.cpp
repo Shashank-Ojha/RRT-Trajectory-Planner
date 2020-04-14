@@ -4,6 +4,8 @@
     On Xcode, Run Visualizer project
  */
 
+#define GL_SILENCE_DEPRECATION
+
 #include <iostream>
 #include <stdlib.h>
 #include <math.h>
@@ -20,23 +22,26 @@ using namespace std;
 Visualizer::Visualizer() {}
 
 void Visualizer::plot_point(Point &p, Color &node_color) {
-    rescale(p);
+    double x = rescale(p.x);
+    double y = rescale(p.y);
     glPointSize(10);
     glBegin(GL_POINTS);
     glColor3f(node_color.r, node_color.g, node_color.b);
-    glVertex2f(p.x, p.y);
+    glVertex2f(x, y);
     glEnd();
 }
 
 void Visualizer::plot_segment(Point &p1, Point &p2, Color &node_color, Color &edge_color)
 {
-    rescale(p1);
-    rescale(p2);
+    double x1 = rescale(p1.x);
+    double y1 = rescale(p1.y);
+    double x2 = rescale(p2.x);
+    double y2 = rescale(p2.y);
     glLineWidth(5.0);
     glBegin(GL_LINES);
     glColor3f(edge_color.r, edge_color.g, edge_color.b);
-    glVertex2f(p1.x, p1.y); // origin of the line
-    glVertex2f(p2.x, p2.y); // ending point of the line
+    glVertex2f(x1, y1); // origin of the line
+    glVertex2f(x2, y2); // ending point of the line
     glEnd();
     
     // plot points
@@ -48,8 +53,9 @@ void Visualizer::plot_trajectory(vector<Point> &trajectory, Color &node_color, C
     glBegin(GL_LINE_STRIP);
     glColor3f(edge_color.r, edge_color.g, edge_color.b);
     for (auto p : trajectory) {
-        rescale(p);
-        glVertex2f(p.x, p.y);
+        double x = rescale(p.x);
+        double y = rescale(p.y);
+        glVertex2f(x, y);
     }
     glEnd();
     
@@ -60,11 +66,14 @@ void Visualizer::plot_trajectory(vector<Point> &trajectory, Color &node_color, C
 }
 
 void Visualizer::plot_graph(Graph<Point> &graph, Color &node_color, Color &edge_color) {
-    // need to rescale points after given array of points
-    unordered_map<Point*, unordered_set<Point*>>::iterator it = graph.adj_list.begin();
-    while (it != graph.adj_list.end()) {
-        Point *p1 = it->first;
-        for (auto p2 : it->second) {
+    for (auto pair : graph.adj_list) {
+        Point *p1 = pair.first;
+        unordered_set<Point*> set = pair.second;
+        for (auto *p2 : set) {
+            double x1 = rescale(p1->x);
+            double y1 = rescale(p1->y);
+            double x2 = rescale(p2->x);
+            double y2 = rescale(p2->y);
             plot_segment(*p1, *p2, node_color, edge_color);
         }
     }
@@ -74,8 +83,9 @@ void Visualizer::plot_obstacle(vector<Point> &obstacles, Color &edge_color) {
     glBegin(GL_POLYGON);
     glColor3f(edge_color.r, edge_color.g, edge_color.b);
     for (auto p : obstacles) {
-        rescale(p);
-        glVertex2f(p.x, p.y);
+        double x = rescale(p.x);
+        double y = rescale(p.y);
+        glVertex2f(x, y);
     }
     glEnd();
 }
@@ -84,9 +94,8 @@ void Visualizer::display() {
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Visualizer::rescale(Point &p) {
-    p.x *= SCALE;
-    p.y *= SCALE;
+double Visualizer::rescale(double p) {
+    return p * SCALE;
 }
 
 void Visualizer::init(int argc, char *argv[]) {

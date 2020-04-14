@@ -28,6 +28,7 @@ class Graph {
     int num_vertices;
     int num_edges;
     unordered_map<Node*, unordered_set<Node*>> adj_list;
+    vector<pair<Node*, Node*>> edges;
 
     /* Constructors */
     Graph(Node *root);
@@ -58,6 +59,7 @@ Graph<Node>::Graph(Node *root) {
   this->num_vertices = 1;
   this->num_edges = 0;
   this->adj_list[root] = unordered_set<Node*>();
+  this->edges = vector<pair<Node*, Node*>>();
 }
 
 /**
@@ -86,6 +88,7 @@ void Graph<Node>::add_edge(Node *A, Node *B) {
   this->adj_list[B].insert(A);
 
   this->num_edges += 1;
+  this->edges.push_back(make_pair(A, B));
 }
 
 /**

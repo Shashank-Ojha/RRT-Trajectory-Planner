@@ -1,3 +1,4 @@
+#define GL_SILENCE_DEPRECATION
 #include <iostream>
 #include <vector>
 
@@ -11,10 +12,8 @@
 #include "Planner.h"
 #include "Visualizer.h"
 
-#define GL_SILENCE_DEPRECATION
-
 using namespace std;
-string DEFAULT_MAP = "maps/map1.txt";
+string DEFAULT_MAP = "maps/map2.txt";
 
 string parse_args(int argc, char *argv[]) {
   string filename = DEFAULT_MAP;
@@ -42,12 +41,17 @@ void example1(int argc, char *argv[], Map &map) {
     
     Visualizer v;
     v.init(argc, argv);
-    v.plot_point(*start, red);
-    v.plot_point(*goal, blue);
+    cout << "Start: " << *start << endl;
+    cout << "Goal: " << *goal << endl;
+    
+    
      for (Obstacle obs : map.obstacles) {
          v.plot_obstacle(obs.convex_hull, black);
      }
-//    v.plot_graph(graph, black, green);
+    v.plot_graph(graph, green, green);
+    v.plot_point(*start, red);
+    v.plot_point(*goal, blue);
+    
     v.run();
 }
 

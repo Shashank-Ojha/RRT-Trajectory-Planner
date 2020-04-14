@@ -12,6 +12,7 @@
 #define __VISUALIZER_H
 
 #define GL_SILENCE_DEPRECATION
+
 #include <iostream>
 #include <stdlib.h>
 #include <math.h>
@@ -46,7 +47,7 @@ class Visualizer {
     
     static void display();
 
-    void rescale(Point &p);
+    double rescale(double p);
     void init(int argc, char *argv[]);
     void run();
 };
