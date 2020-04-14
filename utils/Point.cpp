@@ -102,10 +102,10 @@ double Point::dist(const Point &other) const {
  */
 double Point::angle(const Point &other) const {
     double r = this->dist(other);
-    double dx = this->x - other.x;
+    double dx = other.x - this->x;
     double angle = acos (dx / r);
-    if (this->y - other.y) {
-        angle += M_PI;
+    if (this->y > other.y) {
+        angle *= -1;
     }
     return angle;
 }

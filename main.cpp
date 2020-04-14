@@ -44,7 +44,6 @@ void example1(int argc, char *argv[], Map &map) {
     cout << "Start: " << *start << endl;
     cout << "Goal: " << *goal << endl;
     
-    
      for (Obstacle obs : map.obstacles) {
          v.plot_obstacle(obs.convex_hull, black);
      }

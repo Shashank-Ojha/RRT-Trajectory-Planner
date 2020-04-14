@@ -19,7 +19,7 @@
 #include "utils/Search.h"
 #include "utils/KDTree.h"
 
-#define MAX_NODES 20
+#define MAX_NODES 200
 #define EPSILON 1
 
 using namespace std;
@@ -31,8 +31,8 @@ using namespace std;
 /****************************************************************************/
 
 Point sample(float width, float height) {
-  double x = ((double) rand() / (RAND_MAX)) * width;    /* 0 <= x < width */
-  double y = ((double) rand() / (RAND_MAX)) * height;   /* 0 <= y < height */
+  double x = (((double) rand() / (RAND_MAX)) * 2 * width) - width;    /* -width <= x < width */
+  double y = (((double) rand() / (RAND_MAX)) * 2 * height) - height;   /* -height <= y < height */
   return Point(x, y);
 }
 
@@ -47,10 +47,9 @@ pair<Point, int> extend(Graph<Point> &graph, KDTree &tree, Point &goal, Map &map
     Point *near_p = tree.nearest_neighbor(&goal);
     Point *new_p = configure(*near_p, goal);
     if (map.is_freespace(*new_p)) {
-        cout << "point " << *new_p << endl;
         tree.insert_node(new_p);
         graph.add_edge(new_p, near_p);
-        if (new_p->dist(goal) < 1) {
+        if (new_p->dist(goal) < 0.5) {
             return make_pair(*new_p, REACHED);
         }
         return make_pair(*new_p, ADVANCED);
