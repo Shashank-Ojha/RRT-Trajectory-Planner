@@ -1,6 +1,7 @@
 #define GL_SILENCE_DEPRECATION
 #include <iostream>
 #include <vector>
+#include <ctime>
 
 #include "utils/Graph.h"
 #include "utils/KDTree.h"
@@ -8,6 +9,7 @@
 #include "utils/Obstacle.h"
 #include "utils/Point.h"
 #include "utils/Search.h"
+
 
 #include "Planner.h"
 #include "Visualizer.h"
@@ -37,7 +39,8 @@ void example1(int argc, char *argv[], Map &map) {
     Point *start = new Point(-1, -3);
     Point *goal = new Point(9, 5);
     
-    Graph graph = Planner::RRT(*start, *goal, map);
+    Graph<Point> graph = Planner::RRT(*start, *goal, map);
+    vector<Point*> path = Search<Point>::a_star(start, goal, graph, heuristic_fn);
     
     Visualizer v;
     v.init(argc, argv);
@@ -47,7 +50,9 @@ void example1(int argc, char *argv[], Map &map) {
      for (Obstacle obs : map.obstacles) {
          v.plot_obstacle(obs.convex_hull, black);
      }
+  
     v.plot_graph(graph, green, green);
+    v.plot_trajectory(path, black, black);
     v.plot_point(*start, red);
     v.plot_point(*goal, blue);
     
@@ -85,31 +90,13 @@ void kd_tree_testing_suite() {
 }
 
 int main(int argc, char *argv[]) {
+  /* Set random seed */
+  srand((unsigned) time(0));
 
   string filename = parse_args(argc, argv);
   cout << filename << endl;
 
-  Point *init = new Point();
-  Point *one = new Point(1, 0);
-  Point *two = new Point(2, 0);
-  Point *three = new Point(3, 0);
-  Point *med = new Point(1, 1);
-
-  Graph<Point> g(init);
-  g.add_edge(init, one);
-  g.add_edge(one, two);
-  g.add_edge(two, three);
-  g.add_edge(init, med);
-  g.add_edge(med, three);
-
-  vector<Point*> path = Search<Point>::a_star(init, three, g, heuristic_fn);
-
-  for (Point *p : path) {
-    cout << *p << endl;
-  }
-
   Map map = Map(filename);
-    
   example1(argc, argv, map);
 }
 

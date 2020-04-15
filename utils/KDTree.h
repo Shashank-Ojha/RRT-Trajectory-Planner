@@ -57,10 +57,10 @@ class NodeDist
 {
   public:
     Node *node;
-    int dist;
+    double dist;
 
     // Constructor
-    NodeDist(Node *node, int dist);
+    NodeDist(Node *node, double dist);
     /* In-place operator, Update node and dist if appropriate */
     bool compare_dist(NodeDist *other);
 };

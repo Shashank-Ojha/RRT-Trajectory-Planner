@@ -49,19 +49,19 @@ void Visualizer::plot_segment(Point &p1, Point &p2, Color &node_color, Color &ed
     plot_point(p2, node_color);
 }
 
-void Visualizer::plot_trajectory(vector<Point> &trajectory, Color &node_color, Color &edge_color) {
+void Visualizer::plot_trajectory(vector<Point*> &trajectory, Color &node_color, Color &edge_color) {
     glBegin(GL_LINE_STRIP);
     glColor3f(edge_color.r, edge_color.g, edge_color.b);
     for (auto p : trajectory) {
-        double x = rescale(p.x);
-        double y = rescale(p.y);
+        double x = rescale(p->x);
+        double y = rescale(p->y);
         glVertex2f(x, y);
     }
     glEnd();
     
     // plot points
     for (auto p : trajectory) {
-        plot_point(p, node_color);
+        plot_point(*p, node_color);
     }
 }
 

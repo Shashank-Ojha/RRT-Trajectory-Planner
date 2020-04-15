@@ -18,6 +18,8 @@
 #include "utils/Point.h"
 
 
+typedef int status_t;
+
 /* Constants to describe results of extending the tree */
 #define REACHED 1
 #define ADVANCED 0

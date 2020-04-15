@@ -29,7 +29,7 @@ double Node::node_dist(Node *other) {
   return this->data->dist(*(other->data));
 }
 
-NodeDist::NodeDist(Node *node, int dist) {
+NodeDist::NodeDist(Node *node, double dist) {
   this->node = node;
   this->dist = dist;
 }
@@ -69,7 +69,7 @@ NodeDist *nearest_neighbor_helper(Node *curr_node, NodeDist* best_so_far,
 		return NULL;
 	}
   // check current node
-  int curr_dist = test->node_dist(curr_node);
+  double curr_dist = test->node_dist(curr_node);
   NodeDist *possible = new NodeDist(curr_node, curr_dist);
   bool found_closer_nn = best_so_far->compare_dist(possible);
 
@@ -93,7 +93,7 @@ NodeDist *nearest_neighbor_helper(Node *curr_node, NodeDist* best_so_far,
 	found_closer_nn = best_so_far->compare_dist(possible);
   /* have to check opposite side of split if the hypersphere centered at test
   with radius best_dist crosses the splitting boundary */
-  int radius = fabs((test->data->at(curr_dim) - curr_node->data->at(curr_dim)));
+  double radius = fabs((test->data->at(curr_dim) - curr_node->data->at(curr_dim)));
   if (radius < best_so_far->dist) {
     if (dir == LEFT)  {
       possible = (nearest_neighbor_helper(curr_node->right, best_so_far,
@@ -117,7 +117,7 @@ Point *KDTree::nearest_neighbor(Point *p) {
   Node *curr_node = this->root;
   Node *test = new Node(p);
   NodeDist *node_dist = nearest_neighbor_helper(curr_node, best_so_far, test, 0);
-  int best_dist = node_dist->dist;
+  double best_dist = node_dist->dist;
   Node* nn_node = node_dist->node;
   // want to return the point b/c node interface is unncessary
   return nn_node->data;

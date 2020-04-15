@@ -32,6 +32,7 @@ class Point {
     /* Constructors */
     Point();
     Point(const double x, const double y);
+    Point(const Point &other);
 
     /* Function Prototypes */
     Point operator + (const Point &other) const;

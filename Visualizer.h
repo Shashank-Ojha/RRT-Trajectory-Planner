@@ -41,7 +41,7 @@ class Visualizer {
     /* Function Prototypes */
     void plot_point(Point &p, Color &node_color);
     void plot_segment(Point &p1, Point &p2, Color &node_color, Color &edge_color);
-    void plot_trajectory(vector<Point> &trajectory, Color &node_color, Color &edge_color);
+    void plot_trajectory(vector<Point*> &trajectory, Color &node_color, Color &edge_color);
     void plot_graph(Graph<Point> &graph, Color &node_color, Color &edge_color);
     void plot_obstacle(vector<Point> &obstacles, Color &edge_color);
     

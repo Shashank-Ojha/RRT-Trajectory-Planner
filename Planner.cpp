@@ -20,7 +20,7 @@
 #include "utils/KDTree.h"
 
 #define MAX_NODES 200
-#define EPSILON 1
+#define EPSILON 0.5
 
 using namespace std;
 
@@ -36,30 +36,44 @@ Point sample(float width, float height) {
   return Point(x, y);
 }
 
-Point* configure(Point &near_p, Point &goal) {
-    double a = near_p.angle(goal);
-    double x = near_p.x + EPSILON * cos(a);
-    double y = near_p.y + EPSILON * sin(a);
+Point *get_rand_config(Map &map) {
+  Point rand_p = sample(map.width, map.height);
+
+  while (!map.is_freespace(rand_p)) {
+    rand_p = sample(map.width, map.height);
+  }
+  
+  return new Point(rand_p);
+}
+
+Point* extension(Point *near_p, Point *goal) {
+    double theta = near_p->angle(*goal);
+    double x = near_p->x + EPSILON * cos(theta);
+    double y = near_p->y + EPSILON * sin(theta);
     return new Point(x, y);
 }
 
-pair<Point, int> extend(Graph<Point> &graph, KDTree &tree, Point &goal, Map &map) {
-    Point *near_p = tree.nearest_neighbor(&goal);
-    Point *new_p = configure(*near_p, goal);
+pair<Point*, status_t> extend(Graph<Point> &graph, KDTree &tree, Point *goal, Map &map) {
+    Point *near_p = tree.nearest_neighbor(goal);
+    Point *new_p = extension(near_p, goal);
     if (map.is_freespace(*new_p)) {
-        tree.insert_node(new_p);
-        graph.add_edge(new_p, near_p);
-        if (new_p->dist(goal) < 0.5) {
-            return make_pair(*new_p, REACHED);
+        if (new_p->dist(*goal) < EPSILON) {
+          tree.insert_node(goal);
+          graph.add_edge(goal, near_p);
+          delete new_p;
+          return make_pair(goal, REACHED);
+        } else {
+            tree.insert_node(new_p);
+            graph.add_edge(new_p, near_p);
+            return make_pair(new_p, ADVANCED);
         }
-        return make_pair(*new_p, ADVANCED);
     }
-    return make_pair(*new_p, TRAPPED);
+    return make_pair(new_p, TRAPPED);
 }
 
-pair<Point, int> connect(Graph<Point> &graph, KDTree &tree, Point &goal, Map &map) {
-    pair<Point, int> p_status;
-    int status = ADVANCED;
+pair<Point*, status_t> connect(Graph<Point> &graph, KDTree &tree, Point *goal, Map &map) {
+    pair<Point*, status_t> p_status;
+    status_t status = ADVANCED;
     while (status == ADVANCED) {
         p_status = extend(graph, tree, goal, map);
         status = p_status.second;
@@ -88,27 +102,23 @@ Graph<Point> Planner::RRT(Point &start, Point &goal, Map &map) {
     KDTree treeA = KDTree(&start);
     KDTree treeB = KDTree(&goal);
     Graph<Point> graph = Graph(&start);
-    Point rand_p;
-    pair<Point, int> p_status;
+    pair<Point*, int> p_status;
     
     for (int i = 0; i < MAX_NODES; i++) {
-        rand_p = sample(map.width, map.height);
-        // Ensure random sample doesn't collide with obstacle
-        while (!map.is_freespace(rand_p)) {
-            rand_p = sample(map.width, map.height);
-        }
-        p_status = extend(graph, treeA, rand_p, map);
+        Point *rand_config = get_rand_config(map);
+
+        p_status = extend(graph, treeA, rand_config, map);
         if (p_status.second != TRAPPED) {
             p_status = connect(graph, treeB, p_status.first, map);
             if (p_status.second == REACHED) {
                 return graph;
-//                return vector<Point>();
             }
             swap(treeA, treeB);
+        } else {
+          delete rand_config;
         }
     }
   return graph;
-//    return vector<Point>();
 }
 
 vector<Point> Planner::RRT_star(Point &start, Point &goal, Map &map) {

@@ -18,7 +18,7 @@ $(APP_NAME): $(OBJS)
 # Create Object file for everything in utils dir
 utils/%.o: utils/%.cpp utils/%.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
+	
 # Create Object file for everything in current dir
 %.o: %.cpp %.h
 	$(CXX) $(CXXFLAGS) -c $< -o $@ 

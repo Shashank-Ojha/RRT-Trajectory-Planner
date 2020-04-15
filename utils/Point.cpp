@@ -38,6 +38,17 @@ Point::Point(const double x, const double y) {
 }
 
 /**
+ * @brief Copy constructor.
+ *
+ * @param p Coordinate value.
+ * @return Point at (x, y).
+ */
+Point::Point(const Point &other) {
+  this->x = other.x;
+  this->y = other.y;
+}
+
+/**
  * @brief Takes vector sum of two points.
  *
  * @param other Point to add.
