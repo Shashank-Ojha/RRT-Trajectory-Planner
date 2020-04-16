@@ -17,11 +17,17 @@ $(APP_NAME): $(OBJS)
 
 # Create Object file for everything in utils dir
 utils/%.o: utils/%.cpp utils/%.h
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c -MMD $< -o $@
 	
 # Create Object file for everything in current dir
 %.o: %.cpp %.h
-	$(CXX) $(CXXFLAGS) -c $< -o $@ 
+	$(CXX) $(CXXFLAGS) -c -MMD $< -o $@ 
 
 clean:
 	rm *.o utils/*.o $(APP_NAME)
+
+-include *.d
+
+# $< 
+# $@ is the filename of the target of the rule
+# -MMD makes .d files to track dependencies like .h files w/o associated .cpp files

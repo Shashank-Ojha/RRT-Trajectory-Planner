@@ -17,7 +17,6 @@
 #include "utils/Map.h"
 #include "utils/Point.h"
 
-
 typedef int status_t;
 
 /* Constants to describe results of extending the tree */
@@ -25,13 +24,14 @@ typedef int status_t;
 #define ADVANCED 0
 #define TRAPPED -1
 
+using namespace std;
+
 class Planner {
   
   public:
     /* Function Prototypes */
-//    static vector<Point> RRT(Point &start, Point &goal, Map &map);
-    static Graph<Point> RRT(Point &start, Point &goal, Map &map);
-    static vector<Point> RRT_star(Point &start, Point &goal, Map &map);
+    static pair<vector<Point*>, Graph<Point>> RRT(Point *start, Point *goal, Map &map);
+    static pair<vector<Point*>, Graph<Point>>  RRT_star(Point *start, Point *goal, Map &map);
 };
 
 #endif /* __PLANNER_H */

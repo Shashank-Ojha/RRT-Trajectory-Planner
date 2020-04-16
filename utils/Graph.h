@@ -21,6 +21,12 @@
 
 using namespace std;
 
+template <typename Node>
+class Graph;
+
+template<typename Node>
+ostream& operator<< (ostream& os, const Graph<Node>& g);
+
 template <typename Node> 
 class Graph {
   public:
@@ -38,7 +44,7 @@ class Graph {
     unordered_set<Node*> get_neighbors(Node *n);
 
     /* Output Stream Definition */
-    friend ostream& operator<<(ostream& os, const Graph& g);
+    friend ostream& operator<< <>(ostream& os, const Graph<Node>& g);
 };
 
 /****************************************************************************/
@@ -111,7 +117,7 @@ unordered_set<Node*> Graph<Node>::get_neighbors(Node *n) {
  * @return New output stream with graph inside stream.
  */
 template <typename Node> 
-ostream& operator<<(ostream& os, const Graph<Node>& g) {
+ostream& operator<<(ostream& os, const Graph<Node> &g) {
   os << "Number of vertices: " << g.num_vertices << endl;
   os << "Number of edges: " << g.num_edges << endl;
   for (auto adj_map : g.adj_list) {
