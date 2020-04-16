@@ -16,11 +16,6 @@
 
 #include <iostream>
 
-/* Constants for Line-Side Test */
-#define LEFT -1
-#define ON 0
-#define RIGHT 1
-
 using namespace std;
 
 class Point {
@@ -42,7 +37,6 @@ class Point {
     double cross(const Point &other) const;
     double dist(const Point &other) const;
     double angle(const Point &other) const;
-    int line_side_of(const Point &A, const Point &B) const;
 
     bool equals(Point *other);
     double at(int dimension);

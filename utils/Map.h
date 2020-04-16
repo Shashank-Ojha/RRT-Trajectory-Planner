@@ -33,6 +33,7 @@ class Map {
     /* Function Prototypes */
     void add_obstacle(const Obstacle &o);
     bool is_freespace(const Point &p) const;
+    bool is_valid_path(const Point &p1, const Point &p2) const;
 };
 
 #endif /* __MAP_H */

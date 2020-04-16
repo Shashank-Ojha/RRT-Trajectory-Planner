@@ -93,7 +93,7 @@ Point* new_config(Point *start, Point *goal) {
 pair<Point*, status_t> extend(Graph<Point> &graph, KDTree *tree, Point *goal, Map &map) {
     Point *near_p = tree->nearest_neighbor(goal);
     Point *new_p = new_config(near_p, goal);
-    if (map.is_freespace(*new_p)) { /* TODO fix to check for intersection */
+    if (map.is_valid_path(*near_p, *new_p)) {
         tree->insert_node(new_p);
         graph.add_edge(new_p, near_p);
         if (new_p == goal) { /* Equality test is on pointers */
@@ -164,6 +164,8 @@ pair<vector<Point*>, Graph<Point>> Planner::RRT(Point *start, Point *goal, Map &
         if (p_status.second != TRAPPED) {
             p_status = connect(graph, treeB, p_status.first, map);
             if (p_status.second == REACHED) {
+                delete treeA;
+                delete treeB;
                 vector<Point*> path = Search<Point>::a_star(start, goal, graph, heuristic);
                 return {path, graph};
             }
@@ -172,6 +174,9 @@ pair<vector<Point*>, Graph<Point>> Planner::RRT(Point *start, Point *goal, Map &
           delete rand_config;
         }
     }
+    
+  delete treeA;
+  delete treeB;
   cout << "RRT Planner Failed" << endl;
   return {vector<Point*>(), Graph<Point>(NULL)};
 }

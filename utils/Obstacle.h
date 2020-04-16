@@ -15,6 +15,11 @@
 
 #include "Point.h"
 
+/* Constants for Line-Side Test (used internally) */
+#define LEFT -1
+#define ON 0
+#define RIGHT 1
+
 class Obstacle {
   public:
     /* Data */
@@ -26,6 +31,7 @@ class Obstacle {
     /* Function Prototypes */
     static bool is_convex_hull(const vector<Point> &polygon);
     bool collides(const Point &p) const;
+    bool path_collides(const Point &p1, const Point &p2) const;
 };
 
 #endif /* __OBSTACLE_H */

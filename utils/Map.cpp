@@ -99,3 +99,12 @@ bool Map::is_freespace(const Point &p) const {
   }
   return true;
 }
+
+bool Map::is_valid_path(const Point &p1, const Point &p2) const {
+  for(const Obstacle &obs : this->obstacles) {
+    if(obs.path_collides(p1, p2)) {
+      return false;
+    }
+  }
+  return true;
+}

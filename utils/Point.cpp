@@ -121,26 +121,6 @@ double Point::angle(const Point &other) const {
     return angle;
 }
 
-/**
- * @brief Returns whether the point is ON, the LEFT of, or the RIGHT of the
- * line passing through A and B.
- *
- * @param A First point on line.
- * @param B Second point on line.
- * @return Line side test result of current point with respect to line AB.
- */
-int Point::line_side_of(const Point &A, const Point  &B) const {
-  Point line = B - A;
-  Point error = *this - A;
-  double cross_prod = line.cross(error);
-  if (cross_prod > 0) {
-    return LEFT;
-  }
-  else if (cross_prod < 0) {
-    return RIGHT;
-  }
-  return ON;
-}
 
 bool float_equals(double x, double y) {
   double epsilon = 0.000000001;

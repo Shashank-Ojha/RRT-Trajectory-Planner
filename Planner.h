@@ -31,7 +31,7 @@ class Planner {
   public:
     /* Function Prototypes */
     static pair<vector<Point*>, Graph<Point>> RRT(Point *start, Point *goal, Map &map);
-    static pair<vector<Point*>, Graph<Point>>  RRT_star(Point *start, Point *goal, Map &map);
+    static pair<vector<Point*>, Graph<Point>> RRT_star(Point *start, Point *goal, Map &map);
 };
 
 #endif /* __PLANNER_H */
