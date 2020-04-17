@@ -49,8 +49,7 @@ Map::Map(const string filename) {
   infile.open(filename);
 
   if (!infile) {
-    cout << "Unable to open file!" << endl;
-    exit(1); // terminate with error
+    throw std::invalid_argument( "Map Constructor: Unable to open file!");
   }
 
   infile >> this->height;
@@ -89,7 +88,7 @@ void Map::add_obstacle(const Obstacle &o) {
  * Map.
  *
  * @param p A point.
- * @return True if it doesn't collid with any obstacles and False otherwise.
+ * @return True if it doesn't collid with any obstacles and false otherwise.
  */
 bool Map::is_freespace(const Point &p) const {
   for(const Obstacle &obs : this->obstacles) {
@@ -100,6 +99,14 @@ bool Map::is_freespace(const Point &p) const {
   return true;
 }
 
+/**
+ * @brief Checks if the given path collides with any of the obstacles in the
+ * Map.
+ *
+ * @param p1 First point on path.
+ * @param p2 Second point on path.
+ * @return True if it doesn't collid with any obstacles and false otherwise.
+ */
 bool Map::is_valid_path(const Point &p1, const Point &p2) const {
   for(const Obstacle &obs : this->obstacles) {
     if(obs.path_collides(p1, p2)) {

@@ -47,7 +47,7 @@ class Search {
 
 /****************************************************************************/
 
-                            /* Implementation */
+                          /* Node Implementation */
 
 /****************************************************************************/
 
@@ -86,7 +86,11 @@ struct priority {
   }
 };
 
-/******      Search Functions      ******/
+/****************************************************************************/
+
+                            /* Search Functions */
+
+/****************************************************************************/
 
 /**
  * @brief Backtraces up the parents to find full path to target.
@@ -149,7 +153,7 @@ vector<Node*> Search<Node>::a_star(Node *start, Node *target,
   }
 
   cout << "Failed to find path in A*" << endl;
-  assert(false);
+  return vector<Node*>();
 }
 
 #endif /* __SEARCH_H */

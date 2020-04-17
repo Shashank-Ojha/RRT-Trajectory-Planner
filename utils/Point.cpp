@@ -54,7 +54,7 @@ Point::Point(const Point &other) {
  * @param other Point to add.
  * @return Point containing sum of this point and other point.
  */
-Point  Point::operator + (const Point &other) const {
+Point Point::operator + (const Point &other) const {
   Point res;
   res.x = this->x + other.x;
   res.y = this->y + other.y;
@@ -108,8 +108,8 @@ double Point::dist(const Point &other) const {
 /**
  * @brief Computes angle between two points.
  *
- * @param other Point to cross against.
- * @return Angle x axis and two points in radians
+ * @param other Point to find the angle to.
+ * @return Angle between horizontal at current point and other point in radians
  */
 double Point::angle(const Point &other) const {
     double r = this->dist(other);
@@ -122,18 +122,45 @@ double Point::angle(const Point &other) const {
 }
 
 
-bool float_equals(double x, double y) {
-  double epsilon = 0.000000001;
-  return fabs(x - y) < epsilon;
+/**
+ * @brief Checks for equality between doubles. We define equality between  
+ * doubles if their absolute difference is less than a predefined EPSILON.
+ *
+ * @param x 1st double
+ * @param y 2nd double
+ * @return True if equal and false otherwise.
+ */
+bool double_equals(double x, double y) {
+  return fabs(x - y) < POINT_EPSILON;
 }
 
-bool Point::equals(Point *other) {
-  return float_equals(this->x, other->x) && float_equals(this->y, other->y);
+/**
+ * @brief Checks for equality between points.
+ *
+ * @param other Point to check equality against.
+ * @return True if equal and false otherwise.
+ */
+bool Point::operator == (const Point &other) const {
+  return double_equals(this->x, other.x) && double_equals(this->y, other.y);
 }
+
+
 
 double Point::at(int dimension) {
   if (dimension == 0) return this->x;
   else return this->y;
+}
+
+/**
+ * @brief Accesses the value of the point at the dimension given.
+ *
+ * @param dim Dimension to access.
+ * @return True if equal and false otherwise.
+ */
+double Point::operator [] (int dimension) const { 
+  if (dimension == 0) return this->x;
+  if (dimension == 1) return this->y;
+  throw std::invalid_argument( "Point Operator [] received invalid dimension");
 }
 
 /**

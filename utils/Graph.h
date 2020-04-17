@@ -108,7 +108,6 @@ unordered_set<Node*> Graph<Node>::get_neighbors(Node *n) {
   return this->adj_list[n];
 }
 
-
 /**
  * @brief Adds support for printing Graphs.
  * 

@@ -19,6 +19,8 @@
 #define RIGHT 1
 #define EXISTS 0
 
+#define K 2
+
 class Node
 {
   public:
@@ -42,27 +44,10 @@ class KDTree {
     KDTree(Point *init_pt);
 
     /* Function Prototypes */
-    Point *nearest_neighbor(Point *p);
     bool insert_node(Point *p);
     Node *find_node(Point *p);
+    Point *nearest_neighbor(Point *p);
     void print_inorder();
-};
-
-/*
-Class for nearest_neighbor function that holds both the node that is
-closest to the point we are finding a neighbor for, and the corresponding
-distance with the point
-*/
-class NodeDist
-{
-  public:
-    Node *node;
-    double dist;
-
-    // Constructor
-    NodeDist(Node *node, double dist);
-    /* In-place operator, Update node and dist if appropriate */
-    bool compare_dist(NodeDist *other);
 };
 
 

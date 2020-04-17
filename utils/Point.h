@@ -18,6 +18,8 @@
 
 using namespace std;
 
+#define POINT_EPSILON 0.000000001
+
 class Point {
   public:
     /* Data */
@@ -32,6 +34,8 @@ class Point {
     /* Function Prototypes */
     Point operator + (const Point &other) const;
     Point operator - (const Point &other) const;
+    bool operator == (const Point &other) const;
+    double operator [] (int dimension) const;
 
     double dot(const Point &other) const;
     double cross(const Point &other) const;
