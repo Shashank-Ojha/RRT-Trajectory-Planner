@@ -8,8 +8,10 @@
  *  @bug No known bugs.
  */
 
-#include <math.h>
 #include <limits>
+#include <cfloat>
+#include <unordered_set>
+#include <math.h>
 
 #include "Point.h"
 #include "KDTree.h"
@@ -160,8 +162,8 @@ void nearest_neighbor_helper(Node *curr_node,  pair<Node*, double> &best_so_far,
 
   /* have to check opposite side of split if the hypersphere centered at test
   with radius best_dist crosses the splitting boundary */
-  double radius = fabs((test->at(curr_dim) - curr_node->data->at(curr_dim)));
-  if (radius < best_so_far.second) {
+  double boundary_dist = (test->at(curr_dim) - curr_node->data->at(curr_dim));
+  if (fabs(boundary_dist) < best_so_far.second) {
     if (dir == LEFT)  {
       nearest_neighbor_helper(curr_node->right, best_so_far, test, depth+1);
     }
@@ -172,9 +174,52 @@ void nearest_neighbor_helper(Node *curr_node,  pair<Node*, double> &best_so_far,
 }
 
 Point *KDTree::nearest_neighbor(Point *p) {
-  pair<Node*, double> best_so_far = {NULL, INT_MAX}; // TODO: fix to DBL_MAX
+  pair<Node*, double> best_so_far = {NULL, DBL_MAX}; // TODO: fix to DBL_MAX
   nearest_neighbor_helper(this->root, best_so_far, p, 0);
   return best_so_far.first->data;
+}
+
+void points_in_radius_helper(Node *curr_node, unordered_set<Point*> &within,
+                             Point* test, double radius, int depth) {
+
+  if (curr_node == NULL) { return; }
+  if (curr_node->data == test) { return; } /* Don't add the test point */
+
+  // Check current node
+  double curr_dist = test->dist(*(curr_node->data));  
+  if(curr_dist < radius) {
+    within.insert(curr_node->data);
+  }
+
+  // Check left or right node depending on curr_dim
+  int curr_dim = depth % K;
+  int dir; // to check if we need to look across the split
+  if (test->at(curr_dim) < curr_node->data->at(curr_dim)) {
+    dir = LEFT;
+    points_in_radius_helper(curr_node->left, within, test, radius, depth+1);
+  }
+  else {
+    dir = RIGHT;
+    points_in_radius_helper(curr_node->right, within, test, radius, depth+1);
+  }
+
+  /* have to check opposite side of split if the hypersphere centered at test
+  with radius best_dist crosses the splitting boundary */
+  double boundary_dist = (test->at(curr_dim) - curr_node->data->at(curr_dim));
+  if (fabs(boundary_dist) < radius) {
+    if (dir == LEFT)  {
+      points_in_radius_helper(curr_node->right, within, test, radius, depth+1);
+    }
+    else {
+      points_in_radius_helper(curr_node->left, within, test, radius, depth+1);
+    }
+  }
+}
+
+unordered_set<Point*> KDTree::points_in_radius(Point *p, double radius) {
+  unordered_set<Point*> within;
+  points_in_radius_helper(this->root, within, p, radius, 0);
+  return within;
 }
 
 

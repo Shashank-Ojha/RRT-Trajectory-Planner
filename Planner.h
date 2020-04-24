@@ -12,6 +12,7 @@
 #define __PLANNER_H
 
 #include <vector>
+#include <unordered_map>
 
 #include "utils/Graph.h"
 #include "utils/Map.h"
@@ -24,7 +25,32 @@ typedef int status_t;
 #define ADVANCED 0
 #define TRAPPED -1
 
+#define MAX_NODES 4000
+#define EPSILON 0.2
+
+#define SEARCH_RADIUS 2 /* This should be much bigger than EPSILON */
+
 using namespace std;
+
+/* Used in RRT* to keep track of parents and costs of a node */
+class Planner_Utils {
+  public:
+    /* Data */
+    unordered_map<Point*, Point*> parents;
+    unordered_map<Point*, double> costs;
+
+    /* Constructors */
+    Planner_Utils(Point *init_pt);
+
+    /* Function Prototypes */
+    Point* get_parent(Point *p);
+    double get_cost(Point *p);
+
+    void add_point(Point *p, Point *parent, double cost);
+    void set_parent(Point *p, Point *parent);
+    void set_cost(Point *p, double cost);
+};
+
 
 class Planner {
   

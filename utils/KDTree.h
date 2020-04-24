@@ -12,6 +12,8 @@
 #ifndef __KDTREE_H
 #define __KDTREE_H
 
+
+#include <unordered_set>
 #include "Point.h"
 
 /* Constants for direction of node placement */
@@ -47,6 +49,7 @@ class KDTree {
     bool insert_node(Point *p);
     Node *find_node(Point *p);
     Point *nearest_neighbor(Point *p);
+    unordered_set<Point*> points_in_radius(Point *p, double radius);
     void print_inorder();
 };
 

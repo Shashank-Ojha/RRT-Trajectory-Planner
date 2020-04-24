@@ -41,6 +41,7 @@ class Graph {
 
     /* Function Prototypes */
     void add_edge(Node *A, Node *B);
+    void remove_edge(Node *A, Node *B);
     unordered_set<Node*> get_neighbors(Node *n);
 
     /* Output Stream Definition */
@@ -65,7 +66,6 @@ Graph<Node>::Graph(Node *root) {
   this->num_vertices = 1;
   this->num_edges = 0;
   this->adj_list[root] = unordered_set<Node*>();
-  this->edges = vector<pair<Node*, Node*>>();
 }
 
 /**
@@ -94,7 +94,29 @@ void Graph<Node>::add_edge(Node *A, Node *B) {
   this->adj_list[B].insert(A);
 
   this->num_edges += 1;
-  this->edges.push_back(make_pair(A, B));
+}
+
+/**
+ * @brief Removes an edge in the graph between Nodes A and B. It does not remove
+ * the vertex though.
+ *
+ * @param A Pointer to an first vertex object.
+ * @param B Pointer to an second vertex object.
+ * @return Void.
+ */
+template <typename Node> 
+void Graph<Node>::remove_edge(Node *A, Node *B) {
+  // Remove edge from A to B
+  if(this->adj_list.find(A) != this->adj_list.end()) {
+    this->adj_list[A].erase(B);
+  }
+
+  // Remove edge from B to A
+  if(this->adj_list.find(B) != this->adj_list.end()) {
+    this->adj_list[B].erase(A);
+  }
+
+  this->num_edges -= 1;
 }
 
 /**

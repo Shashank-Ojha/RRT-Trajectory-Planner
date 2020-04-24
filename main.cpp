@@ -54,7 +54,7 @@ void results(int n, Point *start, Point *goal, Map &map) {
     
     for (int i = 0; i < n; i++) {
         time_t start_time = clock();
-        auto plan = Planner::RRT(start, goal, map);
+        auto plan = Planner::RRT_star(start, goal, map);
         time_t end_time = clock();
         
         plan_time.push_back(end_time - start_time);
@@ -79,25 +79,25 @@ void example1(int argc, char *argv[], Map &map) {
     cout << "Start: " << *start << endl;
     cout << "Goal: " << *goal << endl;
     
-    results(10, start, goal, map);
+    // results(10, start, goal, map);
     
-//    auto plan = Planner::RRT(start, goal, map);
-//    vector<Point*> path = plan.first;
-//    Graph<Point> graph = plan.second;
+   auto plan = Planner::RRT(start, goal, map);
+   vector<Point*> path = plan.first;
+   Graph<Point> graph = plan.second;
     
-//    Visualizer v;
-//    v.init(argc, argv);
-//
-//    for (Obstacle obs : map.obstacles) {
-//      v.plot_obstacle(obs.convex_hull, black);
-//    }
-//
-//    v.plot_graph(graph, green, green);
-//    v.plot_trajectory(path, black, black);
-//    v.plot_point(*start, red);
-//    v.plot_point(*goal, blue);
-//
-//    v.run();
+   Visualizer v;
+   v.init(argc, argv);
+
+   for (Obstacle obs : map.obstacles) {
+     v.plot_obstacle(obs.convex_hull, black);
+   }
+
+   v.plot_graph(graph, green, green);
+   v.plot_trajectory(path, black, black);
+   v.plot_point(*start, red);
+   v.plot_point(*goal, blue);
+
+   v.run();
 }
 
 int main(int argc, char *argv[]) {
