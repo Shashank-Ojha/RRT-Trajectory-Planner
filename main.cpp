@@ -14,6 +14,8 @@
 #include "Planner.h"
 #include "Visualizer.h"
 
+#define MS 1000
+
 using namespace std;
 string DEFAULT_MAP = "maps/map2.txt";
 Color black = {0, 0, 0};
@@ -57,7 +59,7 @@ void results(int n, Point *start, Point *goal, Map &map) {
         auto plan = Planner::RRT_star(start, goal, map);
         time_t end_time = clock();
         
-        plan_time.push_back(end_time - start_time);
+        plan_time.push_back((double)(end_time - start_time)/CLOCKS_PER_SEC*MS);
         path_length.push_back(plan.first.size() * 1.0);
         nodes.push_back(plan.second.num_vertices * 1.0);
     }
@@ -79,12 +81,12 @@ void example1(int argc, char *argv[], Map &map) {
     cout << "Start: " << *start << endl;
     cout << "Goal: " << *goal << endl;
     
-    // results(10, start, goal, map);
+//    results(100, start, goal, map);
     
    auto plan = Planner::RRT(start, goal, map);
    vector<Point*> path = plan.first;
    Graph<Point> graph = plan.second;
-    
+
    Visualizer v;
    v.init(argc, argv);
 
