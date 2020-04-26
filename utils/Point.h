@@ -35,12 +35,15 @@ class Point {
     Point operator + (const Point &other) const;
     Point operator - (const Point &other) const;
     bool operator == (const Point &other) const;
-    double operator [] (int dimension) const;
+    double operator [] (const int dimension) const;
 
     double dot(const Point &other) const;
     double cross(const Point &other) const;
     double dist(const Point &other) const;
     double angle(const Point &other) const;
+
+    Point normalize() const;
+    Point scale(const double &s) const;
 
     bool equals(Point *other);
     double at(int dimension);

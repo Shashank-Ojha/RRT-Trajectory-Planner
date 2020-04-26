@@ -23,12 +23,14 @@ class Map {
     float height;
     float width;
     int num_obstacles;
+    float rad; /* Used to compute minkowski sum */
     vector<Obstacle> obstacles;
+    vector<Obstacle> minkowski;
 
     /* Constructors */
-    Map();
-    Map(const vector<Obstacle> obs);
-    Map(const string filename);
+    Map(const float &robot_radius);
+    Map(const float &robot_radius, const vector<Obstacle> &obs);
+    Map(const float &robot_radius, const string &filename);
 
     /* Function Prototypes */
     void add_obstacle(const Obstacle &o);

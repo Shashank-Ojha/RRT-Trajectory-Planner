@@ -76,6 +76,31 @@ bool Obstacle::is_convex_hull(const vector<Point> &polygon) {
 }
 
 /**
+ * @brief Returns new convex hull that has been expanded by radius r.
+ *
+ * @param obstacle The original obstacle.
+ * @param rad The radius to expand with.
+ * @return True if the points form a convex polygon and False otherwise.
+ */
+Obstacle Obstacle::minkowski_sum(const Obstacle &o, double rad) {
+  int n = o.convex_hull.size();
+  vector<Point> polygon;
+  for (int i = 0; i < n; i++) {
+    const Point &prev = o.convex_hull[(i + n - 1) % n];
+    const Point &curr = o.convex_hull[i % n];
+    const Point &next = o.convex_hull[(i + 1) % n];
+
+    Point delta1 = (curr - prev).normalize();
+    Point delta2 = (curr - next).normalize();
+
+    Point new_point = curr + delta1.scale(rad) + delta2.scale(rad);
+    cout << new_point << endl;
+    polygon.push_back(new_point);
+  }
+  return Obstacle(polygon);
+}
+
+/**
  * @brief Checks if the segment AB intersects the segment CD
  *
  * @param A Point A

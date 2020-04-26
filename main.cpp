@@ -76,22 +76,26 @@ double heuristic_fn(Point *n, Point* target) {
 void example1(int argc, char *argv[], Map &map) {
     
     Point *start = new Point(-1, -3);
-    Point *goal = new Point(9, 5);
+    Point *goal = new Point(9, 7);
     
     cout << "Start: " << *start << endl;
     cout << "Goal: " << *goal << endl;
     
 //    results(100, start, goal, map);
     
-   auto plan = Planner::RRT(start, goal, map);
+   auto plan = Planner::RRT_star(start, goal, map);
    vector<Point*> path = plan.first;
    Graph<Point> graph = plan.second;
 
    Visualizer v;
    v.init(argc, argv);
 
-   for (Obstacle obs : map.obstacles) {
+   for (Obstacle obs : map.minkowski) {
      v.plot_obstacle(obs.convex_hull, black);
+   }
+
+   for (Obstacle obs : map.obstacles) {
+     v.plot_obstacle(obs.convex_hull, green);
    }
 
    v.plot_graph(graph, green, green);
@@ -105,11 +109,12 @@ void example1(int argc, char *argv[], Map &map) {
 int main(int argc, char *argv[]) {
   /* Set random seed */
   srand((unsigned) time(0));
+  double robot_radius = 2;
 
   string filename = parse_args(argc, argv);
   cout << filename << endl;
 
-  Map map = Map(filename);
+  Map map = Map(robot_radius, filename);
   example1(argc, argv, map);
 }
 

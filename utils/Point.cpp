@@ -121,6 +121,27 @@ double Point::angle(const Point &other) const {
     return angle;
 }
 
+/**
+ * @brief Normalizes the point to the sum of its value is 1.
+ *
+ * @return Normalized point.
+ */
+Point Point::normalize() const {
+    double norm = sqrt(this->dot(*this));
+    double new_x = (this->x) / norm;
+    double new_y = (this->y) / norm;
+    return Point(new_x, new_y);
+}
+
+/**
+ * @brief Scales the point by s.
+ *
+ * @param s Scale factor.
+ * @return Scaled point.
+ */
+Point Point::scale(const double &s) const {
+    return Point(s * (this->x), s * (this->y));
+}
 
 /**
  * @brief Checks for equality between doubles. We define equality between  
@@ -145,8 +166,13 @@ bool Point::operator == (const Point &other) const {
 }
 
 
-
-double Point::at(int dimension) {
+/**
+ * @brief Accesses the value of the point at the dimension given.
+ *
+ * @param dimension Dimension to access.
+ * @return True if equal and false otherwise.
+ */
+double Point::at(int dimension){
   if (dimension == 0) return this->x;
   else return this->y;
 }
@@ -157,7 +183,7 @@ double Point::at(int dimension) {
  * @param dim Dimension to access.
  * @return True if equal and false otherwise.
  */
-double Point::operator [] (int dimension) const { 
+double Point::operator [] (const int dimension) const { 
   if (dimension == 0) return this->x;
   if (dimension == 1) return this->y;
   throw std::invalid_argument( "Point Operator [] received invalid dimension");

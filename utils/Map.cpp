@@ -20,9 +20,11 @@ using namespace std;
 /**
  * @brief Default Map constructor.
  *
+ * @param robot_radius Radius of Robot
  * @return Map containing no obstacles.
  */
-Map::Map() {
+Map::Map(const float &robot_radius) {
+  this->rad = robot_radius;
   this->num_obstacles = 0;
   this->obstacles = vector<Obstacle>();
 }
@@ -30,10 +32,12 @@ Map::Map() {
 /**
  * @brief Map constructor given a set of obstacles.
  *
+ * @param robot_radius Radius of Robot
  * @param obstacles A vector of all obstacles in map.
  * @return Map containing all obstacles given.
  */
-Map::Map(const vector<Obstacle> obs) {
+Map::Map(const float &robot_radius, const vector<Obstacle> &obs) {
+  this->rad = robot_radius;
   this->num_obstacles = obs.size();
   this->obstacles = vector<Obstacle>(obs);
 }
@@ -41,10 +45,13 @@ Map::Map(const vector<Obstacle> obs) {
 /**
  * @brief Map constructor that reads data from file.
  *
+ * @param robot_radius Radius of Robot
  * @param filename The file to read from.
  * @return Map containing all data given in file.
  */
-Map::Map(const string filename) {
+Map::Map(const float &robot_radius, const string &filename) {
+  this->rad = robot_radius;
+
   ifstream infile;
   infile.open(filename);
 
@@ -67,10 +74,13 @@ Map::Map(const string filename) {
       infile >> y;
       polygon.push_back(Point(x, y));
     } 
-    this->obstacles.push_back(Obstacle(polygon));
+    Obstacle o(polygon);
+    this->obstacles.push_back(o);
+    this->minkowski.push_back(Obstacle::minkowski_sum(o, this->rad));
     polygon.clear();    
   }
 }
+
 
 /**
  * @brief Adds the given obstacle to the map.
@@ -81,6 +91,7 @@ Map::Map(const string filename) {
 void Map::add_obstacle(const Obstacle &o) {
   this->num_obstacles += 1;
   this->obstacles.push_back(o);
+  this->minkowski.push_back(Obstacle::minkowski_sum(o, this->rad));
 }
 
 /**
@@ -91,7 +102,7 @@ void Map::add_obstacle(const Obstacle &o) {
  * @return True if it doesn't collid with any obstacles and false otherwise.
  */
 bool Map::is_freespace(const Point &p) const {
-  for(const Obstacle &obs : this->obstacles) {
+  for(const Obstacle &obs : this->minkowski) {
     if(obs.collides(p)) {
       return false;
     }
@@ -108,7 +119,7 @@ bool Map::is_freespace(const Point &p) const {
  * @return True if it doesn't collid with any obstacles and false otherwise.
  */
 bool Map::is_valid_path(const Point &p1, const Point &p2) const {
-  for(const Obstacle &obs : this->obstacles) {
+  for(const Obstacle &obs : this->minkowski) {
     if(obs.path_collides(p1, p2)) {
       return false;
     }

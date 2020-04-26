@@ -30,8 +30,10 @@ class Obstacle {
 
     /* Function Prototypes */
     static bool is_convex_hull(const vector<Point> &polygon);
+    static Obstacle minkowski_sum(const Obstacle &o, const double rad);
     bool collides(const Point &p) const;
     bool path_collides(const Point &p1, const Point &p2) const;
+    
 };
 
 #endif /* __OBSTACLE_H */
