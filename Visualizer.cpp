@@ -21,6 +21,23 @@ using namespace std;
 
 Visualizer::Visualizer() {}
 
+void Visualizer::plot_circle(Point &p, double radius, Color &node_color) {
+    double x = rescale(p.x);
+    double y = rescale(p.y);
+    double r = rescale(radius);
+    double angle, x1, y1;
+    
+    glPointSize(10);
+    glBegin(GL_POLYGON);
+    glColor3f(node_color.r, node_color.g, node_color.b);
+    for (angle = 0; angle < 360.0; angle += 1.0) {
+        x1 = x + cos(angle) * r;
+        y1 = y + sin(angle) * r;
+        glVertex2f(x1, y1);
+    }
+    glEnd();
+}
+
 void Visualizer::plot_point(Point &p, Color &node_color) {
     double x = rescale(p.x);
     double y = rescale(p.y);

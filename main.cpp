@@ -69,7 +69,7 @@ void results(int n, Point *start, Point *goal, Map &map) {
     cout << "# Nodes Sampled: " << mean(nodes) << " -+ " << stan_dev(nodes) << endl;
 }
 
-void example1(int argc, char *argv[], Map &map) {
+void example1(int argc, char *argv[], Map &map, double robot_radius) {
     
     Point *start = new Point(-1, -3);
     Point *goal = new Point(9, 7);
@@ -86,17 +86,19 @@ void example1(int argc, char *argv[], Map &map) {
    Visualizer v;
    v.init(argc, argv);
 
-   for (Obstacle obs : map.minkowski) {
-     v.plot_obstacle(obs.convex_hull, blue);
-   }
+    // expansion of obstacle
+//   for (Obstacle obs : map.minkowski) {
+//     v.plot_obstacle(obs.convex_hull, blue);
+//   }
 
+    // obstacle
    for (Obstacle obs : map.obstacles) {
      v.plot_obstacle(obs.convex_hull, green);
    }
 
    v.plot_graph(graph, green, green);
    v.plot_trajectory(path, black, black);
-   v.plot_point(*start, red);
+   v.plot_circle(*start, robot_radius, red);
    v.plot_point(*goal, blue);
 
    v.run();
@@ -111,6 +113,6 @@ int main(int argc, char *argv[]) {
   cout << filename << endl;
 
   Map map = Map(robot_radius, filename);
-  example1(argc, argv, map);
+  example1(argc, argv, map, robot_radius);
 }
 
