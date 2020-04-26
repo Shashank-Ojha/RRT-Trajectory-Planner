@@ -13,13 +13,22 @@ RUNNING THE CODE:
 CODE BASE:
 
 - main.cpp
+    - Contains the first file the planner runs. It parses user input and runs either RRT-Connect or RRT*
 - Planner.cpp
+    - Contains RRT-Connect and RRT* Algorithms
 - Visualizer.cpp
+    - Contains helper functions to visualize our maps
 
 
 - utils/Graph.h
+    - Contains graph data structure implementation
 - utils/KDTree.cpp
+    - Contains kd-tree data structure implementation
 - utils/Map.cpp
+    - Contains Map class to keep track of all information related to environment
 - utils/Obstacle.cpp
+    - Contains Obstacle class to keep track of all information related to an obstacle
 - utils/Point.cpp
+    - Contains Point class which is utilized throughout the code base
 - utils/Search.h
+    - Contains A* Search Function
