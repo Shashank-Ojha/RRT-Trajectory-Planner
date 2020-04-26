@@ -20,7 +20,7 @@ using namespace std;
 /**
  * @brief Default Map constructor.
  *
- * @param robot_radius Radius of Robot
+ * @param robot_radius Radius of Robot.
  * @return Map containing no obstacles.
  */
 Map::Map(const float &robot_radius) {
@@ -32,7 +32,7 @@ Map::Map(const float &robot_radius) {
 /**
  * @brief Map constructor given a set of obstacles.
  *
- * @param robot_radius Radius of Robot
+ * @param robot_radius Radius of Robot.
  * @param obstacles A vector of all obstacles in map.
  * @return Map containing all obstacles given.
  */
@@ -45,7 +45,7 @@ Map::Map(const float &robot_radius, const vector<Obstacle> &obs) {
 /**
  * @brief Map constructor that reads data from file.
  *
- * @param robot_radius Radius of Robot
+ * @param robot_radius Radius of Robot.s
  * @param filename The file to read from.
  * @return Map containing all data given in file.
  */

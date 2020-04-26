@@ -69,10 +69,6 @@ void results(int n, Point *start, Point *goal, Map &map) {
     cout << "# Nodes Sampled: " << mean(nodes) << " -+ " << stan_dev(nodes) << endl;
 }
 
-double heuristic_fn(Point *n, Point* target) {
-  return n->dist(*target);
-}
-
 void example1(int argc, char *argv[], Map &map) {
     
     Point *start = new Point(-1, -3);
@@ -91,7 +87,7 @@ void example1(int argc, char *argv[], Map &map) {
    v.init(argc, argv);
 
    for (Obstacle obs : map.minkowski) {
-     v.plot_obstacle(obs.convex_hull, black);
+     v.plot_obstacle(obs.convex_hull, blue);
    }
 
    for (Obstacle obs : map.obstacles) {

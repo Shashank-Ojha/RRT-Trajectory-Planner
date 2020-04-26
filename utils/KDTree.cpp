@@ -173,7 +173,7 @@ void nearest_neighbor_helper(Node *curr_node,  pair<Node*, double> &best_so_far,
 }
 
 Point *KDTree::nearest_neighbor(Point *p) {
-  pair<Node*, double> best_so_far = {NULL, DBL_MAX}; // TODO: fix to DBL_MAX
+  pair<Node*, double> best_so_far = {NULL, DBL_MAX};
   nearest_neighbor_helper(this->root, best_so_far, p, 0);
   return best_so_far.first->data;
 }
@@ -225,11 +225,8 @@ unordered_set<Point*> KDTree::points_in_radius(Point *p, double radius) {
 void inorder_traversal_helper(Node *node) {
 	if (node == NULL)
   	return;
-  /* first recur on left child */
 	inorder_traversal_helper(node->left);
-  /* then print the data of node */
   cout << node->data->x << "," << node->data->y << "\n";
-  /* now recur on right child */
   inorder_traversal_helper(node->right);
 }
 

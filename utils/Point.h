@@ -28,14 +28,14 @@ class Point {
 
     /* Constructors */
     Point();
-    Point(const double x, const double y);
+    Point(double x, double y);
     Point(const Point &other);
 
     /* Function Prototypes */
     Point operator + (const Point &other) const;
     Point operator - (const Point &other) const;
     bool operator == (const Point &other) const;
-    double operator [] (const int dimension) const;
+    double operator [] (int dimension) const;
 
     double dot(const Point &other) const;
     double cross(const Point &other) const;
@@ -43,7 +43,7 @@ class Point {
     double angle(const Point &other) const;
 
     Point normalize() const;
-    Point scale(const double &s) const;
+    Point scale(double s) const;
 
     bool equals(Point *other);
     double at(int dimension);

@@ -28,6 +28,12 @@ using namespace std;
 
 /****************************************************************************/
 
+/**
+ * @brief Constructor with initial point.
+ * 
+ * @param init_pt Initial Point.
+ * @return Planner Util object with init_pt.
+ */
 Planner_Utils::Planner_Utils(Point *init_pt) {
   assert(init_pt != NULL);
 
@@ -38,29 +44,63 @@ Planner_Utils::Planner_Utils(Point *init_pt) {
   this->costs[init_pt] = 0;
 }
 
+/**
+ * @brief Get the parent of a point.
+ * 
+ * @param p A Point.
+ * @return A pointer to the parent of of p.
+ */
 Point* Planner_Utils::get_parent(Point *p) {
   assert(p != NULL);
   assert(this->parents.find(p) != this->parents.end());
   return this->parents[p];
 }
 
+/**
+ * @brief Get the cost of a point from the initial point.
+ * 
+ * @param p A Point.
+ * @return The cost of p.
+ */
 double Planner_Utils::get_cost(Point *p) {
   assert(p != NULL);
   assert(this->costs.find(p) != this->costs.end());
   return this->costs[p];
 }
 
+/**
+ * @brief Adds point with its info to Planner_Utils objects.
+ * 
+ * @param p A Point.
+ * @param parent Parent of point p.
+ * @param cost cost of point p.
+ * @return Void.
+ */
 void Planner_Utils::add_point(Point *p, Point *parent, double cost) {
   assert(p != NULL);
   this->parents[p] = parent;
   this->costs[p] = cost;
 }
 
+/**
+ * @brief Updates the parent of point p.
+ * 
+ * @param p A Point.
+ * @param parent New parent.
+ * @return Void.
+ */
 void Planner_Utils::set_parent(Point *p, Point *parent) {
   assert(p != NULL);
   this->parents[p] = parent;
 }
 
+/**
+ * @brief Updates the cost of point p.
+ * 
+ * @param p A Point.
+ * @param cost New cost.
+ * @return Void.
+ */
 void Planner_Utils::set_cost(Point *p, double cost) {
   assert(p != NULL);
   this->costs[p] = cost;
@@ -251,7 +291,7 @@ double heuristic(Point *n, Point *goal) {
 /****************************************************************************/
 
 /**
- * @brief RRT Planner to build random tree and return path
+ * @brief RRT-Connect Planner to build random tree and return path
  * 
  * @param start Starting Point.
  * @param goal Target Point.
@@ -277,8 +317,6 @@ pair<vector<Point*>, Graph<Point>> Planner::RRT(Point *start, Point *goal, Map &
               return {path, graph};
           }
           swap(treeA, treeB); /* built in swap function */
-      } else {
-        delete rand_config;
       }
   }
     
@@ -288,6 +326,14 @@ pair<vector<Point*>, Graph<Point>> Planner::RRT(Point *start, Point *goal, Map &
   return {vector<Point*>(), Graph<Point>(NULL)};
 }
 
+/**
+ * @brief RRT-star planner to build random tree and return path
+ * 
+ * @param start Starting Point.
+ * @param goal Target Point.
+ * @param map A map object.
+ * @return Path from start to target and the underlying graph.
+ */
 pair<vector<Point*>, Graph<Point>> Planner::RRT_star(Point *start, Point *goal, Map &map) {
   KDTree *tree = new KDTree(start);
   Graph<Point> graph(start);
@@ -309,7 +355,6 @@ pair<vector<Point*>, Graph<Point>> Planner::RRT_star(Point *start, Point *goal, 
         vector<Point*> path = Search<Point>::a_star(start, goal, graph, heuristic);
         return {path, graph};
       } else if (p_status.second == TRAPPED) {
-        //  delete rand_config;
       }
   }
     

@@ -32,7 +32,7 @@ Point::Point() {
  * @param y Coordinate value.
  * @return Point at (x, y).
  */
-Point::Point(const double x, const double y) {
+Point::Point(double x, double y) {
   this->x = x;
   this->y = y;
 }
@@ -75,6 +75,40 @@ Point Point::operator - (const Point &other) const {
 }
 
 /**
+ * @brief Checks for equality between doubles. We define equality between  
+ * doubles if their absolute difference is less than a predefined EPSILON.
+ *
+ * @param x 1st double.
+ * @param y 2nd double.
+ * @return True if equal and false otherwise.
+ */
+bool double_equals(double x, double y) {
+  return fabs(x - y) < POINT_EPSILON;
+}
+
+/**
+ * @brief Checks for equality between points.
+ *
+ * @param other Point to check equality against.
+ * @return True if equal and false otherwise.
+ */
+bool Point::operator == (const Point &other) const {
+  return double_equals(this->x, other.x) && double_equals(this->y, other.y);
+}
+
+/**
+ * @brief Accesses the value of the point at the dimension given.
+ *
+ * @param dim Dimension to access.
+ * @return True if equal and false otherwise.
+ */
+double Point::operator [] (const int dimension) const { 
+  if (dimension == 0) return this->x;
+  if (dimension == 1) return this->y;
+  throw std::invalid_argument( "Point Operator [] received invalid dimension");
+}
+
+/**
  * @brief Computes dot product of two points.
  *
  * @param other Point to dot against.
@@ -109,7 +143,7 @@ double Point::dist(const Point &other) const {
  * @brief Computes angle between two points.
  *
  * @param other Point to find the angle to.
- * @return Angle between horizontal at current point and other point in radians
+ * @return Angle between horizontal at current point and other point in radians.
  */
 double Point::angle(const Point &other) const {
     double r = this->dist(other);
@@ -139,30 +173,8 @@ Point Point::normalize() const {
  * @param s Scale factor.
  * @return Scaled point.
  */
-Point Point::scale(const double &s) const {
+Point Point::scale(double s) const {
     return Point(s * (this->x), s * (this->y));
-}
-
-/**
- * @brief Checks for equality between doubles. We define equality between  
- * doubles if their absolute difference is less than a predefined EPSILON.
- *
- * @param x 1st double
- * @param y 2nd double
- * @return True if equal and false otherwise.
- */
-bool double_equals(double x, double y) {
-  return fabs(x - y) < POINT_EPSILON;
-}
-
-/**
- * @brief Checks for equality between points.
- *
- * @param other Point to check equality against.
- * @return True if equal and false otherwise.
- */
-bool Point::operator == (const Point &other) const {
-  return double_equals(this->x, other.x) && double_equals(this->y, other.y);
 }
 
 
@@ -177,17 +189,6 @@ double Point::at(int dimension){
   else return this->y;
 }
 
-/**
- * @brief Accesses the value of the point at the dimension given.
- *
- * @param dim Dimension to access.
- * @return True if equal and false otherwise.
- */
-double Point::operator [] (const int dimension) const { 
-  if (dimension == 0) return this->x;
-  if (dimension == 1) return this->y;
-  throw std::invalid_argument( "Point Operator [] received invalid dimension");
-}
 
 /**
  * @brief Adds support for printing Points.

@@ -4,7 +4,7 @@
  *
  *  @author Shashank Ojha (shashano)
  *  @author Serris Lew (snlew)
- *  @author David Bick ss(dbick)
+ *  @author David Bick (dbick)
  *  @bug No known bugs.
  */
 
