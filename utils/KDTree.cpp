@@ -50,7 +50,7 @@ Node *find_node_helper(Point *p, Node* start_node, int &dir) {
   // keeps track of how many nodes we've seen to know which dim to check
   int depth = 0;
   Node *curr_node = start_node;
-  int curr_dim; int split_pt; int p_data; bool is_equal; int decision;
+  int curr_dim; int decision;
   // if we are not at a leaf
   while (curr_node->left != NULL || curr_node->right != NULL) {
       curr_dim = depth % K;
@@ -65,23 +65,24 @@ Node *find_node_helper(Point *p, Node* start_node, int &dir) {
       }
 
       else if (decision == LEFT) {
-        if (curr_node->left == NULL) { // if we need to go left and there is no left
+        if (curr_node->left == NULL) {
           dir = decision;
           break;
         }
         else {
-          curr_node = curr_node->left; // proceed to left
-          depth++; // increment depth because we are visiting another node
+          curr_node = curr_node->left;
+          depth++;
         }
       }
 
       else {
-        if (curr_node->right == NULL) { // if we need to go right and there is no right
-          dir = decision; break; // break because
+        if (curr_node->right == NULL) {
+          dir = decision;
+          break;
         }
         else {
-          curr_node = curr_node->right; // proceed to the right
-          depth++; // increment depth because we are visiting another node
+          curr_node = curr_node->right;
+          depth++;
         }
       }
   }
@@ -94,13 +95,12 @@ Node *find_node_helper(Point *p, Node* start_node, int &dir) {
 
 bool KDTree::insert_node(Point *p) {
   int dir;
-  // traverse the kdtree looking for our node
+  // finds the node or the closest one
   Node *leaf = find_node_helper(p, this->root, dir);
-  if (dir == EXISTS) { // node is already in the tree, don't need to do anything
+  if (dir == EXISTS) {
     return true;
   }
   else {
-    // create new leaf because we did not find the node we want to insert
     Node *new_leaf = new Node(p);
     if (dir == LEFT) leaf->left = new_leaf;
     else if (dir == RIGHT) leaf->right = new_leaf;
@@ -143,19 +143,18 @@ void nearest_neighbor_helper(Node *curr_node,  pair<Node*, double> &best_so_far,
                                   Point* test, int depth) {
   if (curr_node == NULL) { return; }
 
-  // Check current node
-  double curr_dist = test->dist(*(curr_node->data));  
+  double curr_dist = test->dist(*(curr_node->data));
   pair<Node*, double> compare_point = {curr_node, curr_dist};
   update_dist(best_so_far, compare_point);
 
-  // Check left or right node depending on curr_dim
+
   int curr_dim = depth % K;
-  int dir; // to check if we need to look across the split
-  if (test->at(curr_dim) < curr_node->data->at(curr_dim)) { // proceed left
+  int dir;
+  if (test->at(curr_dim) < curr_node->data->at(curr_dim)) {
     dir = LEFT;
     nearest_neighbor_helper(curr_node->left, best_so_far, test, depth+1);
   }
-  else { // proceed down tree to the right
+  else {
     dir = RIGHT;
     nearest_neighbor_helper(curr_node->right, best_so_far, test, depth+1);
   }
@@ -186,7 +185,7 @@ void points_in_radius_helper(Node *curr_node, unordered_set<Point*> &within,
   if (curr_node->data == test) { return; } /* Don't add the test point */
 
   // Check current node
-  double curr_dist = test->dist(*(curr_node->data));  
+  double curr_dist = test->dist(*(curr_node->data));
   if(curr_dist < radius) {
     within.insert(curr_node->data);
   }
