@@ -178,14 +178,14 @@ pair<Point*, status_t> extend(Graph<Point> &graph, KDTree *tree, Point *goal, Ma
     Point *near_p = tree->nearest_neighbor(goal);
     Point *new_p = new_config(near_p, goal);
     if (map.is_valid_path(*near_p, *new_p)) {
-        tree->insert_node(new_p);
         graph.add_edge(new_p, near_p);
         if (new_p == goal) { /* Equality test is on pointers */
           return {goal, REACHED};
         }
+        tree->insert_node(new_p); /* Only add new_p if it's not already there */
         return {new_p, ADVANCED};
     }
-    delete new_p;
+    if(new_p != goal) { delete new_p; }
     return {NULL, TRAPPED};
 }
 
@@ -248,7 +248,7 @@ pair<Point*, status_t> extend_rewired(Graph<Point> &graph, KDTree *tree, Point *
       }
       return {new_p, ADVANCED};
     }
-    delete new_p;
+    if(new_p != goal) { delete new_p; }
     return {NULL, TRAPPED};
 }
 
@@ -298,7 +298,7 @@ double heuristic(Point *n, Point *goal) {
  * @param map A map object.
  * @return Path from start to target and the underlying graph.
  */
-pair<vector<Point*>, Graph<Point>> Planner::RRT(Point *start, Point *goal, Map &map) {
+pair<vector<Point*>, Graph<Point>> Planner::RRT_connect(Point *start, Point *goal, Map &map) {
   KDTree *treeA = new KDTree(start);
   KDTree *treeB = new KDTree(goal);
   Graph<Point> graph(start);
@@ -308,6 +308,7 @@ pair<vector<Point*>, Graph<Point>> Planner::RRT(Point *start, Point *goal, Map &
       Point *rand_config = get_rand_config(map);
 
       p_status = extend(graph, treeA, rand_config, map);
+      if (p_status.second != REACHED) { delete rand_config; }
       if (p_status.second != TRAPPED) {
           p_status = connect(graph, treeB, p_status.first, map);
           if (p_status.second == REACHED) {
@@ -344,18 +345,18 @@ pair<vector<Point*>, Graph<Point>> Planner::RRT_star(Point *start, Point *goal, 
   for (int i = 0; i < MAX_NODES; i++) {
       double rand_num = ((double) rand() / (RAND_MAX));
       Point *rand_config;
-      if(rand_num < 0.1) {
+      if(rand_num < GOAL_BIAS) { 
         rand_config = goal;
       } else {
         rand_config = get_rand_config(map); 
       }   
       p_status = extend_rewired(graph, tree, rand_config, utils, map);
+      if (p_status.second != REACHED && rand_config != goal) { delete rand_config; }
       if (p_status.first == goal) {
         delete tree;
         vector<Point*> path = Search<Point>::a_star(start, goal, graph, heuristic);
         return {path, graph};
-      } else if (p_status.second == TRAPPED) {
-      }
+      } 
   }
     
   delete tree;

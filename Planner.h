@@ -28,6 +28,7 @@ typedef int status_t;
 #define MAX_NODES 4000
 #define EPSILON 0.2
 
+#define GOAL_BIAS 0.1 
 #define SEARCH_RADIUS 2 /* This should be much bigger than EPSILON */
 
 using namespace std;
@@ -56,7 +57,7 @@ class Planner {
   
   public:
     /* Function Prototypes */
-    static pair<vector<Point*>, Graph<Point>> RRT(Point *start, Point *goal, Map &map);
+    static pair<vector<Point*>, Graph<Point>> RRT_connect(Point *start, Point *goal, Map &map);
     static pair<vector<Point*>, Graph<Point>> RRT_star(Point *start, Point *goal, Map &map);
 };
 
