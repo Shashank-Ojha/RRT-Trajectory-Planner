@@ -15,21 +15,41 @@
 #include "Visualizer.h"
 
 #define MS 1000
+#define RRT_CONNECT 0
+#define RRT_STAR 1
 
 using namespace std;
 string DEFAULT_MAP = "maps/map2.txt";
+
+
 Color black = {0, 0, 0};
 Color red = {1, 0, 0};
 Color blue = {0, 0, 1};
 Color green = {0, 1, 0};
 
-string parse_args(int argc, char *argv[]) {
-  string filename = DEFAULT_MAP;
-  if (argc > 1) {
-    filename = string(argv[1]);
-  }
+void usage() {
+  cout << "Usage: ./plan [FILENAME] [ALGO]" << endl;
+  cout << "\t Maps are in maps/ folder." << endl;
+  cout << "\t Algo is 0 for RRT-Connect and 1 for RRT-Star." << endl;
+  exit(0);
+}
 
-  return filename;
+pair<int, string> parse_args(int argc, char *argv[]) {
+  string filename = DEFAULT_MAP;
+  int chosen_algo = RRT_CONNECT;
+
+  if (argc == 1) {
+    return {chosen_algo, filename};
+  } else if (argc == 3) {
+    filename = string(argv[1]);
+    chosen_algo = atoi(argv[2]);
+    if(chosen_algo != RRT_CONNECT && chosen_algo != RRT_STAR) {
+      usage();
+    }
+    return {chosen_algo, filename};
+  } 
+  usage();
+  exit(0);
 }
 
 double mean(vector<double> data) {
@@ -69,7 +89,14 @@ void results(int n, Point *start, Point *goal, Map &map) {
     cout << "# Nodes Sampled: " << mean(nodes) << " -+ " << stan_dev(nodes) << endl;
 }
 
-void example1(int argc, char *argv[], Map &map, double robot_radius) {
+pair<vector<Point*>, Graph<Point>> get_plan(Point *start, Point *goal, Map &map, int algo) {
+  if(algo == RRT_CONNECT) {
+    return Planner::RRT_connect(start, goal, map);
+  }
+  return Planner::RRT_star(start, goal, map);
+}
+
+void example1(int argc, char *argv[], Map &map, double robot_radius, int algo) {
     
     Point *start = new Point(-1, -3);
     Point *goal = new Point(9, 7);
@@ -78,27 +105,28 @@ void example1(int argc, char *argv[], Map &map, double robot_radius) {
     cout << "Goal: " << *goal << endl;
     
 //    results(100, start, goal, map);
-    
-   auto plan = Planner::RRT_star(start, goal, map);
+
+   auto plan = get_plan(start, goal, map, algo);
+
    vector<Point*> path = plan.first;
    Graph<Point> graph = plan.second;
 
    Visualizer v;
    v.init(argc, argv);
 
-    // expansion of obstacle
+   // Plot expansion of obstacles
 //   for (Obstacle obs : map.minkowski) {
 //     v.plot_obstacle(obs.convex_hull, blue);
 //   }
 
-    // obstacle
+   // Plot obstacles
    for (Obstacle obs : map.obstacles) {
-     v.plot_obstacle(obs.convex_hull, green);
+     v.plot_obstacle(obs.convex_hull, red);
    }
 
    v.plot_graph(graph, green, green);
    v.plot_trajectory(path, black, black);
-   v.plot_circle(*start, robot_radius, red);
+   v.plot_circle(*start, robot_radius, blue);
    v.plot_point(*goal, blue);
 
    v.run();
@@ -109,10 +137,11 @@ int main(int argc, char *argv[]) {
   srand((unsigned) time(0));
   double robot_radius = 2;
 
-  string filename = parse_args(argc, argv);
-  cout << filename << endl;
+  auto args = parse_args(argc, argv);
+  int algo = args.first;
+  string filename = args.second;
 
   Map map = Map(robot_radius, filename);
-  example1(argc, argv, map, robot_radius);
+  example1(argc, argv, map, robot_radius, algo);
 }
 

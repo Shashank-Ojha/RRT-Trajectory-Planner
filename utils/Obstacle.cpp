@@ -94,7 +94,6 @@ Obstacle Obstacle::minkowski_sum(const Obstacle &o, double rad) {
     Point delta2 = (curr - next).normalize();
 
     Point new_point = curr + delta1.scale(rad) + delta2.scale(rad);
-    cout << new_point << endl;
     polygon.push_back(new_point);
   }
   return Obstacle(polygon);
