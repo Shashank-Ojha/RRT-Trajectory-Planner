@@ -119,7 +119,7 @@ void example1(int argc, char *argv[], Map &map, double robot_radius, int algo) {
     v.plot_obstacle(obs.convex_hull, red);
   }
 
-   // Plot obstacles
+   // sPlot obstacles
    for (Obstacle obs : map.obstacles) {
      v.plot_obstacle(obs.convex_hull, blue);
    }
@@ -135,7 +135,7 @@ void example1(int argc, char *argv[], Map &map, double robot_radius, int algo) {
 int main(int argc, char *argv[]) {
   /* Set random seed */
   srand((unsigned) time(0));
-  double robot_radius = 1;
+  double robot_radius = 1.1;
 
   auto args = parse_args(argc, argv);
   int algo = args.first;

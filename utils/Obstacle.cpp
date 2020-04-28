@@ -5,7 +5,7 @@
  *  @author Shashank Ojha (shashano)
  *  @author Serris Lew (snlew)
  *  @author David Bick (dbick)
- *  @bug No known bugs.
+ *  @bug get_convex_hull fails with repeated points.
  */
 
 #include <unordered_map>
@@ -105,11 +105,9 @@ vector<Point> get_convex_hull(const vector<Point> &polygon) {
           break; 
         }
       }
-
       if(proper) {
         edge[i] = j;
       }
-      
     }
   }
 
@@ -147,6 +145,7 @@ Obstacle Obstacle::minkowski_sum(const Obstacle &o, double rad) {
       minkowski.push_back(a + b);
     }
   }
+
   return Obstacle(get_convex_hull(minkowski));
 }
 
