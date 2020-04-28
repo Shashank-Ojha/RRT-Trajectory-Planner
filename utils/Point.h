@@ -37,6 +37,7 @@ class Point {
     bool operator == (const Point &other) const;
     double operator [] (int dimension) const;
 
+
     double dot(const Point &other) const;
     double cross(const Point &other) const;
     double dist(const Point &other) const;
@@ -50,6 +51,16 @@ class Point {
 
     /* Output Stream Definition */
     friend ostream& operator<<(ostream& os, const Point& p);
+};
+
+/* Default Hash Function */
+template<>
+struct hash<Point>
+{
+  size_t operator()(const Point &obj) const
+  {
+    return obj.x;
+  }
 };
 
 #endif /* __POINT_H */

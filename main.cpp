@@ -135,11 +135,12 @@ void example1(int argc, char *argv[], Map &map, double robot_radius, int algo) {
 int main(int argc, char *argv[]) {
   /* Set random seed */
   srand((unsigned) time(0));
-  double robot_radius = 1.1;
+  double robot_radius = 1;
 
   auto args = parse_args(argc, argv);
   int algo = args.first;
   string filename = args.second;
+
 
   Map map = Map(robot_radius, filename);
   example1(argc, argv, map, robot_radius, algo);

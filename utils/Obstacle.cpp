@@ -5,10 +5,11 @@
  *  @author Shashank Ojha (shashano)
  *  @author Serris Lew (snlew)
  *  @author David Bick (dbick)
- *  @bug get_convex_hull fails with repeated points.
+ *  @bug No known bugs.
  */
 
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "Obstacle.h"
@@ -139,14 +140,16 @@ Obstacle Obstacle::minkowski_sum(const Obstacle &o, double rad) {
   robot_set.push_back(Point(-rad, rad));
   robot_set.push_back(Point(-rad, -rad));
 
-  vector<Point> minkowski;
+  unordered_set<Point> minkowski;
   for (Point a : robot_set) {
     for (Point b : o.convex_hull) {
-      minkowski.push_back(a + b);
+      minkowski.insert(a + b);
     }
   }
 
-  return Obstacle(get_convex_hull(minkowski));
+  vector<Point> all_points;
+  all_points.insert(all_points.end(), minkowski.begin(), minkowski.end());
+  return Obstacle(get_convex_hull(all_points));
 }
 
 /**

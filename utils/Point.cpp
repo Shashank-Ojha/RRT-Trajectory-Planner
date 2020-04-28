@@ -189,7 +189,6 @@ double Point::at(int dimension){
   else return this->y;
 }
 
-
 /**
  * @brief Adds support for printing Points.
  *
