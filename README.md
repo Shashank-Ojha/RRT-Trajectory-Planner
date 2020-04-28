@@ -9,6 +9,17 @@ RUNNING THE CODE:
   
     Compile by typing "make" on terminal
     Run by typing "./plan" on terminal
+    
+    The above runs the default map with RRT-Connect
+    
+    If you want to change the map and algo you can also provide two command line arguments.
+    The usage is as follows
+    
+    ./plan [FILENAME] [ALGO]
+      where Maps are in maps/ folder.
+            Algo is 0 for RRT-Connect and 1 for RRT-Star.
+            
+    Example:   ./plan maps/map1.txt 1
 
 CODE BASE:
 
