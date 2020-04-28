@@ -8,6 +8,7 @@
  *  @bug No known bugs.
  */
 
+#include <unordered_map>
 #include <vector>
 
 #include "Obstacle.h"
@@ -58,7 +59,8 @@ bool Obstacle::is_convex_hull(const vector<Point> &polygon) {
   if (n <= 1) { return false; }
   if (n == 2) { return true; }
 
-  int prev_result = 0;
+  bool dir_chosen = false;
+  int dir = ON;
   for (int i = 0; i < n; i++) {
     const Point &A = polygon[i];
     const Point &B = polygon[(i+1) % n];
@@ -66,13 +68,62 @@ bool Obstacle::is_convex_hull(const vector<Point> &polygon) {
 
     int result = line_side_test(C, A, B);
     // Skip first check because no prev_result
-    if(i != 0 && (result == ON || result != prev_result)) {
+    if(i != 0 && dir_chosen && result != ON && result != dir) {
       return false;
     }
-    prev_result = result;
+    if (!dir_chosen && result != ON) {
+      dir_chosen = true;
+      dir = result;
+    }
   }
 
   return true;
+}
+
+
+/**
+ * @brief Get convex hull of a set of points.
+ *
+ * @param polygon set of points.
+ * @return Ordered vector of points defining the convex hull of the input.
+ */
+vector<Point> get_convex_hull(const vector<Point> &polygon) {
+  int n = polygon.size();
+  unordered_map<int, int> edge; 
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (i == j) { continue; }
+      bool proper = true;
+      for (int k = 0; k < n; k++) {
+        if(k == i || k == j) { continue; }
+        const Point &a = polygon[i];
+        const Point &b = polygon[j];
+        const Point &c = polygon[k];
+
+        if(line_side_test(c, a, b) == RIGHT) { 
+          proper = false;
+          break; 
+        }
+      }
+
+      if(proper) {
+        edge[i] = j;
+      }
+      
+    }
+  }
+
+  int first = edge.begin()->first;
+  int idx = first;
+  vector<Point> convex_hull;
+  convex_hull.push_back(polygon[idx]);
+  idx = edge[idx];
+  while(idx != first) {
+    convex_hull.push_back(polygon[idx]);
+    idx = edge[idx];
+  }
+
+  return convex_hull;
 }
 
 /**
@@ -84,19 +135,19 @@ bool Obstacle::is_convex_hull(const vector<Point> &polygon) {
  */
 Obstacle Obstacle::minkowski_sum(const Obstacle &o, double rad) {
   int n = o.convex_hull.size();
-  vector<Point> polygon;
-  for (int i = 0; i < n; i++) {
-    const Point &prev = o.convex_hull[(i + n - 1) % n];
-    const Point &curr = o.convex_hull[i % n];
-    const Point &next = o.convex_hull[(i + 1) % n];
+  vector<Point> robot_set;
+  robot_set.push_back(Point(rad, rad));
+  robot_set.push_back(Point(rad, -rad));
+  robot_set.push_back(Point(-rad, rad));
+  robot_set.push_back(Point(-rad, -rad));
 
-    Point delta1 = (curr - prev).normalize();
-    Point delta2 = (curr - next).normalize();
-
-    Point new_point = curr + delta1.scale(rad) + delta2.scale(rad);
-    polygon.push_back(new_point);
+  vector<Point> minkowski;
+  for (Point a : robot_set) {
+    for (Point b : o.convex_hull) {
+      minkowski.push_back(a + b);
+    }
   }
-  return Obstacle(polygon);
+  return Obstacle(get_convex_hull(minkowski));
 }
 
 /**
